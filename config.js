@@ -8,9 +8,9 @@ const CONFIG = {
   // Indirizzo pubblico della pagina (GitHub Pages): proposto a chi apre una copia della cartella con doppio clic
   sitoPubblico: 'https://comprensivoalmese.github.io/modulistica-ic-almese/',
   // Indirizzo dell'app web "Ricezione moduli" (script apps-script/Ricezione.gs): attiva il pulsante "Invia alla scuola"
-  invioDiretto: '',
+  invioDiretto: 'https://script.google.com/macros/s/AKfycbx8_eQiDYSq3jCqoV5Yn3fzHO4VPwR0v84SilzxLneD1cLctThdgxp0wKo4e0ZP6gpZ/exec',
   // Indirizzo dell'app web "Archivio moduli" (apps-script/archivio): pulsante nella sezione "Moduli ricevuti"
-  archivioScuola: '',
+  archivioScuola: 'https://script.google.com/a/macros/comprensivoalmese.it/s/AKfycbwOYXOEyx2zAcIJW-ZD1eFzU-YMIU3HZVIqEmCPnRfKDxdYBnMFn0xDgcsA5rsrSZ14/exec',
   // Destinatari proposti per l'invio: solo caselle istituzionali
   destinatari: [
     { l: 'Segreteria – toic82100c@istruzione.it', e: 'toic82100c@istruzione.it' },
