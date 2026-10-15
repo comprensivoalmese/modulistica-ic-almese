@@ -13,6 +13,11 @@ const schoolYear = (d) => { const y = d.getMonth() >= 8 ? d.getFullYear() : d.ge
 const CATS = FORMS.cats;
 const ALL = FORMS.forms;
 const ORDER = Object.values(ALL);
+// link a un solo modulo (…/?m=spa002): si vede solo quel modulo, senza elenco né sezione "Moduli ricevuti"
+const LINK_ID = new URLSearchParams(location.search).get('m');
+const SINGOLO = !!(LINK_ID && ALL[LINK_ID]);
+if (SINGOLO) document.body.classList.add('singolo');
+const linkModulo = (id) => location.origin + location.pathname + '?m=' + encodeURIComponent(id);
 
 // ======================================================================== navigazione
 const views = { compila: 'v-compila', archivio: 'v-archivio', privacy: 'v-privacy' };
@@ -140,6 +145,7 @@ async function openForm(id) {
   if (m.compose) compPreview(true); else await renderPreview();
 }
 function closeForm() {
+  if (SINGOLO) return;
   if (dirty && !confirm('Uscire dal modulo? I dati inseriti verranno cancellati.')) return;
   cur = null; V = {}; SG = {}; dirty = false; lastPdf = null;
   $('#fill').hidden = true; $('#pick').hidden = false; $('#bar').hidden = true;
@@ -154,10 +160,15 @@ function renderHead() {
     <h1>${esc(m.title)}</h1><p class="lead" style="margin:0">${esc(m.desc)}</p>
     <div class="meta"><span class="badge">${esc(CATS[m.cat])}</span><span class="badge">${m.pages} pagin${m.pages === 1 ? 'a' : 'e'}</span>
       <button class="btn small" id="blank" type="button">Scarica il modulo vuoto</button>
+      ${SINGOLO ? '' : '<button class="btn small" id="copyLink" type="button">Copia il link del modulo</button>'}
       ${m.attach ? `<a class="btn small" href="${attachUrl(m.attach)}" target="_blank" rel="noopener">Allegato: ${esc(m.attach.replace(/\.pdf$/i, ''))}</a>` : ''}</div>
     ${m.sens ? '<p class="notice warn">Questo modulo contiene dati personali che richiedono particolare tutela (salute, minori, situazioni familiari). Compilalo su un dispositivo tuo o della scuola e invialo solo a indirizzi istituzionali.</p>' : ''}
     ${m.note ? `<p class="notice info">${esc(m.note)}</p>` : ''}`;
   $('#blank').addEventListener('click', downloadBlank);
+  if (!SINGOLO) $('#copyLink').addEventListener('click', async (e) => {
+    const url = linkModulo(m.id), b = e.currentTarget;
+    try { await navigator.clipboard.writeText(url); b.textContent = 'Link copiato ✓'; setTimeout(() => { b.textContent = 'Copia il link del modulo'; }, 2500); } catch (err) { prompt('Copia questo link e invialo:', url); }
+  });
 }
 
 // ======================================================================== modulo
@@ -1184,6 +1195,7 @@ for (const m of ORDER) for (const f of m.fields) if (f.alsoR == null && Array.is
 renderCats(); renderList();
 function route() {
   const h = decodeURIComponent(location.hash.slice(1));
+  if (SINGOLO) { if (h === 'privacy') show('privacy'); else if (!cur) openForm(LINK_ID); else show('compila'); return; }
   if (h.startsWith('m=') && ALL[h.slice(2)]) { if (!cur || cur.id !== h.slice(2)) openForm(h.slice(2)); } else if (views[h]) show(h);
 }
 window.addEventListener('hashchange', route);
