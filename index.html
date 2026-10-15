@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<!-- Nessuna connessione verso l'esterno: i dati non possono lasciare la pagina (solo i file dei modelli, dallo stesso sito) -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' data: blob: https://script.google.com https://script.googleusercontent.com; frame-src blob:; object-src blob:; form-action 'none'; base-uri 'none'">
+<title>Modulistica IC Almese</title>
+<style>
+:root {
+  --bg: #f4f5f7; --surface: #ffffff; --surface-2: #f8f9fb; --line: #dde1e7; --line-strong: #c3c9d2;
+  --text: #1c2430; --muted: #5b6676; --accent: #1d4f91; --accent-2: #e8eef8; --accent-ink: #ffffff;
+  --ok: #1d7a46; --ok-bg: #e7f4ec; --warn: #9a5b00; --warn-bg: #fff4e0; --err: #b3261e; --err-bg: #fdecea;
+  --field: #ffffff; --ink: #0b2a6b; --hl: rgba(29, 79, 145, .16); --shadow: 0 1px 2px rgba(16, 24, 40, .06), 0 1px 3px rgba(16, 24, 40, .08);
+  --r: 10px; --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12161c; --surface: #1a2028; --surface-2: #202833; --line: #2d3642; --line-strong: #3d4856;
+    --text: #e6eaf0; --muted: #9aa5b4; --accent: #7fb0ff; --accent-2: #1f2d44; --accent-ink: #0d1726;
+    --ok: #6fd39b; --ok-bg: #16301f; --warn: #f0b860; --warn-bg: #33270f; --err: #ff8a80; --err-bg: #3a1a18;
+    --field: #141920; --ink: #0b2a6b; --hl: rgba(127, 176, 255, .22); --shadow: none; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12161c; --surface: #1a2028; --surface-2: #202833; --line: #2d3642; --line-strong: #3d4856;
+  --text: #e6eaf0; --muted: #9aa5b4; --accent: #7fb0ff; --accent-2: #1f2d44; --accent-ink: #0d1726;
+  --ok: #6fd39b; --ok-bg: #16301f; --warn: #f0b860; --warn-bg: #33270f; --err: #ff8a80; --err-bg: #3a1a18;
+  --field: #141920; --ink: #0b2a6b; --hl: rgba(127, 176, 255, .22); --shadow: none; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 var(--font); }
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: var(--accent); }
+[hidden] { display: none !important; }
+.sr { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* testata */
+.top { background: var(--surface); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 30; }
+.top-in { max-width: 1320px; margin: 0 auto; padding: 10px 16px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.brand { display: flex; flex-direction: column; line-height: 1.2; margin-right: auto; }
+.brand b { font-size: 17px; }
+.brand span { font-size: 13px; color: var(--muted); }
+.tabs { display: flex; gap: 4px; background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+.tab { border: 0; background: transparent; padding: 6px 14px; border-radius: 999px; cursor: pointer; color: var(--muted); font-weight: 600; font-size: 14px; }
+.tab[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); }
+main { max-width: 1320px; margin: 0 auto; padding: 18px 16px 120px; }
+h1 { font-size: 24px; margin: 4px 0 4px; letter-spacing: -.01em; }
+h2 { font-size: 18px; margin: 0 0 10px; }
+h3 { font-size: 15px; margin: 0 0 8px; }
+.lead { color: var(--muted); margin: 0 0 16px; max-width: 70ch; }
+
+/* catalogo */
+.finder { display: grid; gap: 12px; }
+.search { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--r); padding: 0 12px; }
+.search svg { width: 18px; height: 18px; color: var(--muted); flex: none; }
+.search input { border: 0; outline: 0; background: transparent; padding: 11px 0; width: 100%; font-size: 16px; }
+.search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--hl); }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { border: 1px solid var(--line-strong); background: var(--surface); padding: 5px 12px; border-radius: 999px; cursor: pointer; font-size: 14px; }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.chip .n { opacity: .7; margin-left: 4px; font-variant-numeric: tabular-nums; }
+.count { color: var(--muted); font-size: 14px; margin: 0; }
+.mods { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 10px; }
+.mod { text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: var(--r); padding: 12px 14px; cursor: pointer;
+  display: flex; flex-direction: column; gap: 4px; box-shadow: var(--shadow); }
+.mod:hover { border-color: var(--accent); }
+.mod:focus-visible { outline: 3px solid var(--hl); border-color: var(--accent); }
+.mod .row { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+.mod .code { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: .02em; }
+.mod .name { font-weight: 650; line-height: 1.3; }
+.mod .desc { font-size: 14px; color: var(--muted); line-height: 1.4; }
+.badge { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 999px; background: var(--surface-2); color: var(--muted); border: 1px solid var(--line); white-space: nowrap; }
+.badge.sens { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
+.empty { padding: 30px; text-align: center; color: var(--muted); border: 1px dashed var(--line-strong); border-radius: var(--r); }
+
+/* compilazione */
+.work { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 1000px) { .work { grid-template-columns: minmax(0, 1fr); } }
+.back { border: 0; background: none; color: var(--accent); cursor: pointer; padding: 0; font-weight: 600; margin-bottom: 6px; }
+.head-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 16px; margin-bottom: 14px; }
+.head-card .meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 6px; }
+.notice { border-radius: 8px; padding: 10px 12px; font-size: 14px; margin: 10px 0 0; }
+.notice.warn { background: var(--warn-bg); color: var(--warn); }
+.notice.info { background: var(--accent-2); color: var(--text); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 6px 16px 16px; margin-bottom: 14px; }
+.sec-h { font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 700; margin: 16px 0 6px; padding-top: 10px; border-top: 1px solid var(--line); }
+.card > .sec-h:first-child { border-top: 0; padding-top: 4px; }
+.fld { display: flex; flex-direction: column; gap: 4px; margin: 10px 0; }
+.fld > label, .fld > .lab { font-size: 14px; font-weight: 600; }
+.fld .hint { font-size: 13px; color: var(--muted); }
+.req::after { content: " *"; color: var(--err); }
+input[type=text], input[type=date], input[type=time], input[type=email], input[type=tel], input[type=number], select, textarea {
+  width: 100%; border: 1px solid var(--line-strong); background: var(--field); border-radius: 8px; padding: 9px 11px; font-size: 16px; min-height: 42px; }
+textarea { min-height: 84px; resize: vertical; }
+input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--accent); box-shadow: 0 0 0 3px var(--hl); }
+.fld.bad input, .fld.bad select, .fld.bad textarea { border-color: var(--err); }
+.fld .msg { color: var(--err); font-size: 13px; }
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.chk { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; margin: 6px 0; cursor: pointer; background: var(--surface); }
+.chk input { width: 20px; height: 20px; margin: 1px 0 0; flex: none; accent-color: var(--accent); }
+.chk span { font-size: 15px; }
+.chk:has(input:checked) { border-color: var(--accent); background: var(--accent-2); }
+.choice { display: grid; gap: 6px; }
+.grid-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; margin: 8px 0; }
+table.grid { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 14px; }
+table.grid th { background: var(--surface-2); text-align: left; font-size: 12px; font-weight: 700; color: var(--muted); padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: bottom; }
+table.grid td { padding: 4px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.grid td.rn { color: var(--muted); font-size: 12px; text-align: center; width: 30px; }
+table.grid input, table.grid select { min-height: 36px; padding: 6px 8px; font-size: 15px; }
+table.grid td.ck { text-align: center; }
+table.grid td.ck input { width: 20px; height: 20px; }
+.addrow { margin: 4px 0 10px; }
+
+/* firme */
+.pads { display: grid; gap: 12px; }
+.rowbox { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; margin: 6px 0; background: var(--surface-2); }
+.rowbox-h { display: flex; justify-content: space-between; align-items: center; }
+.pad { border: 1px solid var(--line); border-radius: var(--r); padding: 12px; background: var(--surface); }
+.pad-h { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+.pad-h b { font-size: 15px; }
+.pad canvas { width: 100%; height: 170px; border: 2px dashed var(--line-strong); border-radius: 8px; background: #fff; touch-action: none; display: block; cursor: crosshair; }
+.pad.done canvas { border-style: solid; border-color: var(--ok); }
+.pad-tools { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; align-items: center; }
+.pad-tools .st { font-size: 13px; color: var(--muted); margin-left: auto; }
+.pad.done .st { color: var(--ok); font-weight: 600; }
+.pad .how { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; font-size: 14px; }
+.pad .how label { display: flex; gap: 6px; align-items: center; }
+
+/* anteprima */
+.preview { position: sticky; top: 76px; max-height: calc(100vh - 92px); overflow: auto; background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--r); padding: 10px; }
+@media (max-width: 1000px) { .preview { position: static; max-height: none; } }
+.preview-h { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 8px; }
+.preview-h span { font-size: 13px; color: var(--muted); }
+.pv-page { position: relative; margin: 0 auto 10px; background: #fff; box-shadow: 0 1px 4px rgba(0, 0, 0, .18); }
+.pv-page canvas { display: block; width: 100%; height: auto; }
+.pv-f { position: absolute; color: #0b2a6b; font-family: Helvetica, Arial, sans-serif; line-height: 1.1; overflow: hidden; white-space: nowrap; pointer-events: none; display: flex; align-items: flex-end; }
+.pv-f.multi { white-space: pre-wrap; align-items: flex-start; }
+.pv-f.ck { justify-content: center; align-items: center; font-weight: 700; }
+.pv-f.on { background: rgba(255, 214, 0, .35); outline: 1.5px solid #e0a800; }
+.pv-hide { position: absolute; background: #fff; pointer-events: none; }
+.pv-sig { position: absolute; pointer-events: none; display: flex; align-items: flex-end; justify-content: center; }
+.pv-sig img { max-width: 100%; max-height: 100%; }
+.pv-sig.empty { outline: 1.5px dashed #c2185b; background: rgba(194, 24, 91, .06); }
+.pv-toggle { display: none; }
+@media (max-width: 1000px) { .pv-toggle { display: inline-flex; } .preview.closed .pv-pages { display: none; } }
+
+/* barra azioni */
+.bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; background: var(--surface); border-top: 1px solid var(--line); padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); }
+.bar-in { max-width: 1320px; margin: 0 auto; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.bar .progress { font-size: 14px; color: var(--muted); margin-right: auto; }
+.btn { border: 1px solid var(--line-strong); background: var(--surface); padding: 9px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 15px; display: inline-flex; gap: 6px; align-items: center; text-decoration: none; color: var(--text); }
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.small { padding: 5px 10px; font-size: 13px; }
+.btn.danger { color: var(--err); }
+.btn:disabled { opacity: .5; cursor: default; }
+.errbox { background: var(--err-bg); color: var(--err); border-radius: 8px; padding: 10px 12px; font-size: 14px; margin: 0 0 12px; }
+.errbox button { color: inherit; text-decoration: underline; background: none; border: 0; padding: 0; cursor: pointer; font: inherit; }
+
+/* finestre */
+dialog { border: 0; border-radius: 14px; padding: 0; width: min(560px, calc(100vw - 24px)); background: var(--surface); color: var(--text); box-shadow: 0 20px 60px rgba(0, 0, 0, .3); }
+dialog::backdrop { background: rgba(10, 15, 25, .5); }
+.dlg { padding: 18px 18px 14px; }
+.dlg-f { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; padding: 12px 18px 16px; border-top: 1px solid var(--line); }
+.dlg .ok { background: var(--ok-bg); color: var(--ok); border-radius: 8px; padding: 10px 12px; font-size: 14px; }
+.small { font-size: 13px; color: var(--muted); }
+
+/* archivio */
+.drop { border: 2px dashed var(--line-strong); border-radius: var(--r); padding: 22px; text-align: center; background: var(--surface); }
+.drop.over { border-color: var(--accent); background: var(--accent-2); }
+.drop p { margin: 4px 0 12px; color: var(--muted); }
+.drop .btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.filters { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px 10px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px; margin: 14px 0; }
+.filters .fld { margin: 0; }
+.filters .fld > label { font-size: 12px; color: var(--muted); }
+.filters input, .filters select { min-height: 38px; padding: 6px 9px; font-size: 15px; }
+.filters .wide { grid-column: 1 / -1; }
+.arch-tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin: 6px 0 10px; }
+.arch-tools .count { margin-right: auto; }
+.switch { display: inline-flex; gap: 8px; align-items: center; font-size: 14px; cursor: pointer; }
+.switch input { width: 18px; height: 18px; accent-color: var(--accent); }
+.stats { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-size: 13px; }
+.stat b { font-size: 16px; margin-right: 4px; font-variant-numeric: tabular-nums; }
+.tbl-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); }
+table.arch { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 860px; }
+table.arch th { text-align: left; font-size: 12px; color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--line); background: var(--surface-2); white-space: nowrap; cursor: pointer; user-select: none; }
+table.arch th[aria-sort="ascending"]::after { content: " ▲"; }
+table.arch th[aria-sort="descending"]::after { content: " ▼"; }
+table.arch td { padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.arch tr:hover td { background: var(--surface-2); }
+table.arch tr { cursor: pointer; }
+.pill { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.pill.ok { background: var(--ok-bg); color: var(--ok); }
+.pill.warn { background: var(--warn-bg); color: var(--warn); }
+.pill.err { background: var(--err-bg); color: var(--err); }
+.det dl { display: grid; grid-template-columns: minmax(120px, 40%) 1fr; gap: 4px 12px; font-size: 14px; margin: 0; }
+.det dt { color: var(--muted); }
+.det dd { margin: 0; white-space: pre-wrap; word-break: break-word; }
+.priv { max-width: 80ch; }
+.priv li { margin: 6px 0; }
+footer { color: var(--muted); font-size: 13px; text-align: center; padding: 10px 16px 0; }
+@media (max-width: 560px) {
+  h1 { font-size: 21px; }
+  .duo { grid-template-columns: 1fr; }
+  .brand span { display: none; }
+  .tab { padding: 6px 10px; font-size: 13px; }
+  .bar .progress { width: 100%; }
+}
+</style>
+<script src="lib/pdf-lib.min.js?v=0fe9d555"></script>
+<script src="lib/pdf.min.js?v=a4641a26"></script>
+<script src="config.js?v=920361f0"></script>
+<script src="data.js?v=11855f8c"></script>
+<script src="gen.js?v=346c6d8b"></script>
+<script src="compose.js?v=efba87e4"></script>
+<script src="composti.js?v=c947d3e0"></script>
+</head>
+<body>
+<div class="top"><div class="top-in">
+  <div class="brand"><b>Modulistica IC Almese</b><span>Compila, firma con il dito, invia</span></div>
+  <div class="tabs" role="tablist" aria-label="Sezioni">
+    <button class="tab" role="tab" id="t-compila" aria-selected="true" aria-controls="v-compila">Compila</button>
+    <button class="tab" role="tab" id="t-archivio" aria-selected="false" aria-controls="v-archivio">Moduli ricevuti</button>
+    <button class="tab" role="tab" id="t-privacy" aria-selected="false" aria-controls="v-privacy">Privacy</button>
+  </div>
+</div></div>
+
+<main>
+  <!-- ======================= COMPILA ======================= -->
+  <section id="v-compila" role="tabpanel" aria-labelledby="t-compila">
+    <div id="pick">
+      <h1>Scegli il modulo</h1>
+      <p class="lead">Compila il modulo dal telefono o dal computer, firma con il dito e scarica il PDF o invialo per email.
+        I dati restano sul tuo dispositivo: la pagina non li invia a nessun server.</p>
+      <div class="finder">
+        <label class="search"><span class="sr">Cerca un modulo</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" type="search" placeholder="Cerca: ferie, farmaci, uscita autonoma, DOC 014…" autocomplete="off">
+        </label>
+        <div class="chips" id="cats" role="group" aria-label="Chi compila"></div>
+        <p class="count" id="count" aria-live="polite"></p>
+        <div class="mods" id="mods"></div>
+      </div>
+    </div>
+
+    <div id="fill" hidden>
+      <button class="back" id="back">← Tutti i moduli</button>
+      <div class="work">
+        <div>
+          <div class="head-card" id="headCard"></div>
+          <div id="errs" class="errbox" hidden role="alert"></div>
+          <form id="form" novalidate autocomplete="off"></form>
+          <div class="card" id="sigCard" hidden>
+            <div class="sec-h">Firme</div>
+            <p class="small">Firma con il dito (o con il mouse) nel riquadro. La firma viene inserita nel PDF al posto giusto.</p>
+            <div class="pads" id="pads"></div>
+          </div>
+        </div>
+        <aside class="preview" id="preview" aria-label="Anteprima del documento">
+          <div class="preview-h"><b>Anteprima del documento</b>
+            <span id="pvInfo">si aggiorna mentre scrivi</span>
+            <button class="btn small pv-toggle" id="pvToggle" type="button">Mostra</button></div>
+          <div class="pv-pages" id="pvPages"></div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= ARCHIVIO ======================= -->
+  <section id="v-archivio" role="tabpanel" aria-labelledby="t-archivio" hidden>
+    <h1>Moduli ricevuti</h1>
+    <p class="lead">Per chi riceve i moduli: apri i PDF arrivati per email (o l’intera cartella in cui li salvi) e filtrali.
+      I file vengono letti solo in questa pagina, sul tuo computer: non vengono caricati da nessuna parte e,
+      quando chiudi la pagina, l’elenco sparisce.</p>
+    <div class="notice info" id="archScuola" hidden style="margin:0 0 14px">
+      <b>Archivio della scuola</b> – i moduli inviati alla scuola sono già salvati nel Drive dell’Istituto e annotati nel registro.
+      <p style="margin:8px 0 0"><a class="btn primary" id="archLink" target="_blank" rel="noopener">Apri l’archivio della scuola</a>
+      <span class="small">(serve l’account Google della scuola autorizzato)</span></p></div>
+    <div class="drop" id="drop">
+      <b>Trascina qui i PDF ricevuti</b>
+      <p>oppure</p>
+      <div class="btns">
+        <label class="btn primary">Scegli i file<input type="file" id="pickFiles" accept="application/pdf,.pdf" multiple hidden></label>
+        <label class="btn">Apri una cartella<input type="file" id="pickDir" webkitdirectory multiple hidden></label>
+      </div>
+      <p class="small" id="loadInfo" aria-live="polite"></p>
+    </div>
+    <div id="arch" hidden>
+      <div class="filters" id="filters">
+        <div class="fld wide"><label for="fq">Cerca</label><input type="search" id="fq" placeholder="Testo libero (codice, titolo, valori dei campi)"></div>
+        <div class="fld"><label for="fcat">Chi compila</label><select id="fcat"></select></div>
+        <div class="fld"><label for="fmod">Modulo</label><select id="fmod"></select></div>
+        <div class="fld"><label for="fas">Anno scolastico</label><select id="fas"></select></div>
+        <div class="fld"><label for="fpl">Plesso</label><select id="fpl"></select></div>
+        <div class="fld"><label for="fcl">Classe</label><select id="fcl"></select></div>
+        <div class="fld"><label for="ffirma">Firme</label><select id="ffirma"><option value="">Tutte</option><option value="ok">Complete</option><option value="dig">Da firmare digitalmente</option><option value="no">Mancanti</option></select></div>
+        <div class="fld"><label for="fsens">Dati</label><select id="fsens"><option value="">Tutti</option><option value="1">Con dati sensibili</option><option value="0">Senza dati sensibili</option></select></div>
+        <div class="fld"><label for="fdal">Compilati dal</label><input type="date" id="fdal"></div>
+        <div class="fld"><label for="fal">al</label><input type="date" id="fal"></div>
+      </div>
+      <div class="stats" id="stats"></div>
+      <div class="arch-tools">
+        <p class="count" id="acount"></p>
+        <label class="switch"><input type="checkbox" id="showNames"> Mostra i nomi</label>
+        <button class="btn small" id="resetF" type="button">Azzera filtri</button>
+        <button class="btn small" id="csv" type="button">Esporta elenco (CSV)</button>
+        <button class="btn small danger" id="clearArch" type="button">Svuota</button>
+      </div>
+      <div class="tbl-wrap"><table class="arch"><thead><tr id="ahead"></tr></thead><tbody id="abody"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- ======================= PRIVACY ======================= -->
+  <section id="v-privacy" role="tabpanel" aria-labelledby="t-privacy" hidden>
+    <div class="priv">
+      <h1>Come vengono trattati i dati</h1>
+      <p class="lead">Molti moduli contengono dati personali, anche di minori e di salute. La pagina è costruita per non esporli.</p>
+      <h2>Mentre compili</h2>
+      <ul>
+        <li><b>Nessun server esterno.</b> Il PDF viene creato dal browser, sul tuo dispositivo. La pagina non ha un database: una regola di sicurezza (Content-Security-Policy) blocca qualunque connessione, tranne l’invio alla scuola.</li>
+        <li><b>“Invia alla scuola”</b> manda il PDF direttamente all’archivio dell’Istituto (Google Workspace for Education della scuola), con connessione cifrata. Nessun altro lo riceve.</li>
+        <li><b>Niente memorizzazione.</b> I dati non vengono salvati nel browser: se ricarichi o chiudi la pagina, il modulo si svuota. Il pulsante “Svuota” cancella subito tutto, firme comprese.</li>
+        <li><b>Nome del file e oggetto dell’email senza dati personali.</b> Contengono solo codice del modulo, data e un riferimento casuale (es. <i>FAM002_2026-10-14_K7Q2.pdf</i>).</li>
+        <li><b>Invio solo a indirizzi istituzionali.</b> La pagina propone la casella della scuola. Non inoltrare i moduli a indirizzi personali o in chat di gruppo.</li>
+      </ul>
+      <h2>Per chi riceve</h2>
+      <ul>
+        <li>Il PDF contiene, oltre al documento, un riepilogo dei campi che serve solo a questa pagina per filtrarli. Non contiene nulla che non sia già scritto nel documento.</li>
+        <li>Se la scuola usa l’archiviazione automatica, i moduli arrivati alla casella dedicata vengono salvati da uno script della scuola nel Drive condiviso dell’Istituto (Google Workspace for Education), accessibile solo alla segreteria e al Dirigente.</li>
+        <li>L’archivio legge i PDF dal tuo computer e li tiene in memoria finché la pagina è aperta. I nomi sono nascosti finché non attivi “Mostra i nomi”; anche l’elenco esportato li nasconde, se non sono mostrati.</li>
+        <li>Conserva i PDF ricevuti nelle cartelle della segreteria con accesso riservato, per il tempo previsto dal massimario di scarto; cancella le copie scaricate su dispositivi personali.</li>
+      </ul>
+      <h2>Firma</h2>
+      <ul>
+        <li>La firma col dito è una firma autografa acquisita come immagine: equivale a firmare il foglio stampato. Per i documenti del Dirigente che vanno firmati digitalmente si può scegliere “firma digitale successiva”: la dicitura resta e lo spazio firma resta vuoto.</li>
+      </ul>
+    </div>
+  </section>
+  <footer>Modulistica dell’Istituto Comprensivo di Almese · i dati restano sul tuo dispositivo</footer>
+</main>
+
+<div class="bar" id="bar" hidden><div class="bar-in">
+  <span class="progress" id="progress"></span>
+  <button class="btn danger" id="clear" type="button">Svuota</button>
+  <button class="btn" id="dlBtn" type="button">Scarica PDF</button>
+  <button class="btn primary" id="sendBtn" type="button">Invia</button>
+</div></div>
+
+<dialog id="dlgSend"><form method="dialog">
+  <div class="dlg">
+    <h2>Invia il modulo</h2>
+    <div class="fld"><label for="sFrom" class="req">Il tuo nome e cognome</label><input type="text" id="sFrom" autocomplete="name">
+      <span class="hint">Chi riceve vede subito chi ha inviato il modulo.</span></div>
+    <div class="fld"><label for="sCont">Email o telefono per eventuali comunicazioni (facoltativo)</label><input type="text" id="sCont" autocomplete="email"></div>
+    <div id="sDirect" hidden>
+      <p class="small">Il modulo arriva direttamente all’archivio della scuola: non serve allegarlo a un’email.</p>
+      <button class="btn primary" id="sSend" type="button" style="width:100%;justify-content:center">Invia alla scuola</button>
+    </div>
+    <details id="sAltri"><summary class="small" style="cursor:pointer;margin:10px 0">Altri modi di invio (email, app del telefono)</summary>
+      <div class="fld"><label for="sTo">Destinatario</label><select id="sTo"></select></div>
+      <div class="fld" id="sOtherW" hidden><label for="sOther">Indirizzo email</label><input type="email" id="sOther" placeholder="nome@istruzione.it"></div>
+      <p class="small" id="sHow"></p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="sMail" type="button">Apri l’email</button>
+        <button class="btn" id="sShare" type="button">Condividi il PDF</button></div>
+    </details>
+    <p class="notice warn" id="sWarn" hidden></p>
+    <p class="ok" id="sDone" hidden></p>
+  </div>
+  <div class="dlg-f">
+    <button class="btn" id="sCopy" type="button">Scarica una copia</button>
+    <button class="btn" value="cancel">Chiudi</button>
+  </div>
+</form></dialog>
+
+<dialog id="dlgDet"><form method="dialog">
+  <div class="dlg det" id="detBody"></div>
+  <div class="dlg-f"><button class="btn" value="cancel">Chiudi</button><button class="btn primary" id="detOpen" type="button">Apri il PDF</button></div>
+</form></dialog>
+
+<dialog id="dlgDone"><form method="dialog">
+  <div class="dlg"><h2 id="doneT">PDF pronto</h2><p id="doneP"></p>
+    <p class="small">Quando hai finito, svuota il modulo: i dati spariscono da questa pagina.</p></div>
+  <div class="dlg-f"><button class="btn" value="cancel">Continua a modificare</button><button class="btn danger" id="doneClear" type="button">Svuota il modulo</button></div>
+</form></dialog>
+
+<script type="text/plain" id="pdfworker-src" data-src="lib/pdf.worker.min.js"></script>
+<script src="app.js?v=949a6d3a"></script>
+</body>
+</html>
