@@ -53,7 +53,7 @@ async function makePdf(PDFLib, templateBytes, job) {
     if (multi) { while (size > 5 && wrap(v, size, w).length * size * 1.18 > h) size -= 0.5; } else {
       while (size > 5 && font.widthOfTextAtSize(v, size) > w) size -= 0.5;
     }
-    if (!tf.acroField.getDefaultAppearance()) tf.acroField.setDefaultAppearance('/Helv 10 Tf 0 0 0.55 rg');
+    tf.acroField.setDefaultAppearance((tf.acroField.getDefaultAppearance() || '/Helv 10 Tf').replace(/(\s+[\d.]+){1,4}\s+(rg|g|k)\s*$/, '') + ' 0 g'); // testo nero
     tf.setText(v);
     tf.setFontSize(size);
     return true;

@@ -845,7 +845,7 @@ $('#sSend').addEventListener('click', () => busy($('#sSend'), async () => {
   if (!conferma.ok) { alert(conferma.errore || 'La scuola non ha accettato il modulo.'); return; }
   $('#sDone').hidden = false;
   $('#sDone').innerHTML = `${conferma.senza ? 'Modulo inviato alla scuola.' : 'Modulo ricevuto dalla scuola.'} Riferimento: <b>${esc(r.ref)}</b>.
-    Se vuoi tenerne una copia usa “Scarica una copia”, poi svuota il modulo.`;
+    ${conferma.copia ? `Ti abbiamo inviato la ricevuta con una copia del modulo a <b>${esc(conferma.copia)}</b>.` : 'Se vuoi tenerne una copia usa “Scarica una copia”.'} Poi puoi svuotare il modulo.`;
 }));
 $('#sCopy').addEventListener('click', () => busy($('#sCopy'), async () => {
   const r = await buildPdf(senderName(), senderCont());

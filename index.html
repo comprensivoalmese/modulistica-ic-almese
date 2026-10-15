@@ -217,7 +217,7 @@ footer { color: var(--muted); font-size: 13px; text-align: center; padding: 10px
 <script src="lib/pdf.min.js?v=a4641a26"></script>
 <script src="config.js?v=5c01c6b0"></script>
 <script src="data.js?v=464a3ae3"></script>
-<script src="gen.js?v=346c6d8b"></script>
+<script src="gen.js?v=a929c2c5"></script>
 <script src="compose.js?v=efba87e4"></script>
 <script src="composti.js?v=c947d3e0"></script>
 </head>
@@ -358,7 +358,8 @@ footer { color: var(--muted); font-size: 13px; text-align: center; padding: 10px
     <h2>Invia il modulo</h2>
     <div class="fld"><label for="sFrom" class="req">Il tuo nome e cognome</label><input type="text" id="sFrom" autocomplete="name">
       <span class="hint">Chi riceve vede subito chi ha inviato il modulo.</span></div>
-    <div class="fld"><label for="sCont">Email o telefono per eventuali comunicazioni (facoltativo)</label><input type="text" id="sCont" autocomplete="email"></div>
+    <div class="fld"><label for="sCont">La tua email (facoltativa)</label><input type="text" id="sCont" autocomplete="email" inputmode="email" placeholder="nome@esempio.it">
+      <span class="hint">Se la scrivi, ricevi una copia del modulo inviato come ricevuta. Controlla che sia giusta: la copia contiene i dati del modulo.</span></div>
     <div id="sDirect" hidden>
       <p class="small">Il modulo arriva direttamente all’archivio della scuola: non serve allegarlo a un’email.</p>
       <button class="btn primary" id="sSend" type="button" style="width:100%;justify-content:center">Invia alla scuola</button>
@@ -391,6 +392,6 @@ footer { color: var(--muted); font-size: 13px; text-align: center; padding: 10px
 </form></dialog>
 
 <script type="text/plain" id="pdfworker-src" data-src="lib/pdf.worker.min.js"></script>
-<script src="app.js?v=1f58f4ed"></script>
+<script src="app.js?v=eac23418"></script>
 </body>
 </html>
