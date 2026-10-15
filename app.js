@@ -55,11 +55,22 @@ async function template(id) {
   let bytes;
   if (typeof TPL !== 'undefined' && TPL[id]) bytes = b64(TPL[id]);
   else {
-    const r = await fetch(`forms/${id}.pdf`);
+    let r;
+    try { r = await fetch(`forms/${id}.pdf`); } catch (e) {
+      throw new Error(location.protocol === 'file:' ? 'aperta con doppio clic, la pagina non può leggere i modelli. Aprila dal suo indirizzo internet: '
+        + CONFIG.sitoPubblico : 'controlla la connessione a internet e riprova.');
+    }
     if (!r.ok) throw new Error('modello non trovato');
     bytes = new Uint8Array(await r.arrayBuffer());
   }
   return (tplCache[id] = bytes);
+}
+// copia della cartella del sito aperta con doppio clic: i modelli non si possono leggere (il file unico invece li contiene)
+if (location.protocol === 'file:' && typeof TPL === 'undefined') {
+  $('#fileLocale').hidden = false;
+  $('#fileLocale').innerHTML = `Hai aperto la pagina con un doppio clic sul file: così il browser non le permette di leggere i modelli.
+    Aprila dal suo indirizzo: <a href="${esc(CONFIG.sitoPubblico)}">${esc(CONFIG.sitoPubblico)}</a>
+    (oppure usa il file unico “Modulistica IC Almese.html”).`;
 }
 function attachUrl(name) {
   if (typeof ATT !== 'undefined' && ATT[name]) return URL.createObjectURL(new Blob([b64(ATT[name])], { type: 'application/pdf' }));

@@ -5,6 +5,8 @@ const CONFIG = {
   // Casella Google Workspace della scuola che riceve i moduli e li archivia da sola su Drive
   // (script apps-script/Ricezione.gs). Quando c'è, è il destinatario proposto per primo.
   casellaModuli: 'moduli@comprensivoalmese.it',
+  // Indirizzo pubblico della pagina (GitHub Pages): proposto a chi apre una copia della cartella con doppio clic
+  sitoPubblico: 'https://comprensivoalmese.github.io/modulistica-ic-almese/',
   // Indirizzo dell'app web "Ricezione moduli" (script apps-script/Ricezione.gs): attiva il pulsante "Invia alla scuola"
   invioDiretto: '',
   // Indirizzo dell'app web "Archivio moduli" (apps-script/archivio): pulsante nella sezione "Moduli ricevuti"
