@@ -39,7 +39,7 @@ function renderList() {
   const list = ORDER.filter((m) => (!cat || m.cat === cat) && q.every((w) => norm(`${m.code} ${m.title} ${m.desc} ${CATS[m.cat]}`).includes(w)));
   $('#count').textContent = `${list.length} modul${list.length === 1 ? 'o' : 'i'}`;
   $('#mods').innerHTML = list.length ? list.map((m) => `<button type="button" class="mod" data-id="${m.id}">
-      <span class="row"><span class="code">${esc(m.code)}</span>${m.sens ? '<span class="badge sens" title="Contiene dati personali di categorie particolari o di minori">dati sensibili</span>' : `<span class="badge">${esc(CATS[m.cat])}</span>`}</span>
+      <span class="row"><span class="code">${esc(m.code)}</span><span class="badge">${esc(CATS[m.cat])}</span></span>
       <span class="name">${esc(m.title)}</span><span class="desc">${esc(m.desc)}</span></button>`).join('')
     : '<div class="empty">Nessun modulo trovato. Prova con un’altra parola.</div>';
 }
@@ -153,7 +153,6 @@ function renderHead() {
   $('#headCard').innerHTML = `<div class="row"><span class="code" style="color:var(--accent);font-weight:700;font-size:13px">${esc(m.code)}</span></div>
     <h1>${esc(m.title)}</h1><p class="lead" style="margin:0">${esc(m.desc)}</p>
     <div class="meta"><span class="badge">${esc(CATS[m.cat])}</span><span class="badge">${m.pages} pagin${m.pages === 1 ? 'a' : 'e'}</span>
-      ${m.sens ? '<span class="badge sens">dati sensibili</span>' : ''}
       <button class="btn small" id="blank" type="button">Scarica il modulo vuoto</button>
       ${m.attach ? `<a class="btn small" href="${attachUrl(m.attach)}" target="_blank" rel="noopener">Allegato: ${esc(m.attach.replace(/\.pdf$/i, ''))}</a>` : ''}</div>
     ${m.sens ? '<p class="notice warn">Questo modulo contiene dati personali che richiedono particolare tutela (salute, minori, situazioni familiari). Compilalo su un dispositivo tuo o della scuola e invialo solo a indirizzi istituzionali.</p>' : ''}
