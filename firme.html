@@ -117,6 +117,17 @@ table.dati { width: 100%; border-collapse: collapse; font-size: 14px; }
 .opz .spunte { display: grid; gap: 6px; font-size: 14px; }
 .opz .spunte label { display: flex; gap: 8px; align-items: center; }
 .opz .due { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.opz select.tipo { min-height: 48px; font-weight: 700; font-size: 15px; border-color: color-mix(in srgb, var(--blu) 45%, var(--line)); }
+.opz .campi { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.opz .campi .largo { grid-column: 1 / -1; }
+.opz input[type=time] { min-height: 40px; padding: 0 10px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--campo); color: var(--text); width: 100%; }
+.opz .colonne { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+.opz .colonne summary { cursor: pointer; font-weight: 700; font-size: 14px; }
+.opz .colonne .spunte { margin: 10px 0; }
+.btn.word { border-color: #2B579A; color: #2B579A; justify-content: center; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn.word { border-color: #7fa6e8; color: #a9c4f2; } }
+.btn.pieno.grande { justify-content: center; }
+#o-riassunto b { color: var(--text); }
 .nota { font-size: 12.5px; color: var(--muted); margin: 0; }
 
 footer { margin-top: 30px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; font-size: 13px; color: var(--muted); }
@@ -130,28 +141,44 @@ footer { margin-top: 30px; display: flex; flex-wrap: wrap; align-items: center; 
 /* foglio da stampare */
 #foglio { display: none; }
 @media print {
-  @page { size: A4; margin: 14mm 12mm 14mm 12mm; }
-  body { background: #fff; color: #000; font: 10.5pt/1.3 Arial, Helvetica, sans-serif; }
+  body { background: #fff; color: #111; font: 10pt/1.3 Calibri, Carlito, "Segoe UI", Arial, sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .sfondo, .pagina { display: none !important; }
   #foglio { display: block; }
-  #foglio .intest { text-align: center; margin-bottom: 4mm; }
-  #foglio .intest b { font-size: 12pt; letter-spacing: .02em; }
-  #foglio .intest div { font-size: 9pt; }
-  #foglio h2 { text-align: center; font-size: 13pt; margin: 2mm 0 1mm; text-transform: uppercase; }
-  #foglio .ogg { text-align: center; font-size: 11pt; margin: 0 0 1mm; }
-  #foglio .info { display: flex; justify-content: space-between; font-size: 9pt; margin: 2mm 0 3mm; }
-  #foglio table { width: 100%; border-collapse: collapse; }
+  #foglio .sez { break-after: page; }
+  #foglio .sez:last-child { break-after: auto; }
+  #foglio .intest { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1.6pt solid #1F3A68; padding-bottom: 1.8mm; }
+  #foglio .scuola b { display: block; font-size: 12.5pt; letter-spacing: .07em; color: #1F3A68; }
+  #foglio .scuola span { display: block; font-size: 8pt; color: #6A768A; }
+  #foglio .as { text-align: right; font-size: 6.8pt; color: #6A768A; text-transform: uppercase; letter-spacing: .1em; }
+  #foglio .as b { display: block; font-size: 10.5pt; color: #1F3A68; letter-spacing: 0; }
+  #foglio .titolo { text-align: center; margin: 5mm 0 4mm; }
+  #foglio .occhiello { font-size: 7.6pt; letter-spacing: .2em; text-transform: uppercase; color: #2457D6; font-weight: 700; }
+  #foglio h2 { font-size: 19pt; margin: .6mm 0 0; color: #1F3A68; letter-spacing: .01em; }
+  #foglio .titolo p { font-size: 11.5pt; margin: .6mm 0 0; }
+  #foglio .info { display: flex; border: .6pt solid #B8C2D3; border-radius: 1.6mm; margin-bottom: 3.5mm; }
+  #foglio .info div { flex: 1 1 auto; padding: 1.4mm 3mm; border-left: .6pt solid #B8C2D3; }
+  #foglio .info div:first-child { border-left: 0; }
+  #foglio .info small { display: block; font-size: 6.4pt; text-transform: uppercase; letter-spacing: .12em; color: #6A768A; }
+  #foglio .info b { font-size: 9.8pt; }
+  #foglio .testo { font-size: 8.8pt; font-style: italic; color: #333; margin: 0 0 3mm; }
+  #foglio table { width: 100%; border-collapse: collapse; table-layout: fixed; }
   #foglio thead { display: table-header-group; }
-  #foglio th, #foglio td { border: .6pt solid #000; padding: 0 2mm; height: 8.5mm; text-align: left; font-size: 9.5pt; }
-  #foglio th { background: #eee; height: 7mm; font-size: 8.5pt; text-transform: uppercase; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  #foglio td.n { width: 9mm; text-align: right; }
-  #foglio td.cf { font-family: "Courier New", monospace; font-size: 9pt; width: 40mm; }
-  #foglio th.firma, #foglio td.firma { width: 55mm; }
-  #foglio th.ora, #foglio td.ora { width: 16mm; }
-  #foglio tr { page-break-inside: avoid; break-inside: avoid; }
-  #foglio .piede { margin-top: 5mm; display: flex; justify-content: space-between; font-size: 9.5pt; }
+  #foglio th { background: #1F3A68; color: #fff; font-size: 7pt; text-transform: uppercase; letter-spacing: .07em; padding: 1.5mm 1.5mm; border: .6pt solid #1F3A68; text-align: left; }
+  #foglio th:first-child { text-align: center; }
+  #foglio td { border: .5pt solid #9AA6B8; height: 8.8mm; padding: 0 1.5mm; font-size: 9.5pt; overflow: hidden; }
+  #foglio tbody tr:nth-child(even) td { background: #F4F7FB; }
+  #foglio td.n { text-align: center; color: #6A768A; font-size: 7.6pt; }
+  #foglio td.qual, #foglio td.plesso { font-size: 7.6pt; color: #333; }
+  #foglio td.cf { font-family: "Courier New", monospace; font-size: 8pt; }
+  #foglio tr { break-inside: avoid; }
+  #foglio .chiusura { display: flex; justify-content: space-between; align-items: flex-end; gap: 10mm; margin-top: 7mm; font-size: 9.5pt; break-inside: avoid; }
+  #foglio .firme { display: flex; gap: 12mm; }
+  #foglio .firme div { text-align: center; width: 58mm; }
+  #foglio .firme span { font-size: 8.2pt; color: #444; }
+  #foglio .firme i { display: block; border-bottom: .6pt solid #000; height: 11mm; }
 }
 </style>
+<style id="pagina-stampa"></style>
 </head>
 <body>
 <div class="sfondo" aria-hidden="true"><i></i><i></i></div>
@@ -164,7 +191,7 @@ footer { margin-top: 30px; display: flex; flex-wrap: wrap; align-items: center; 
   </header>
 
   <h1>Elenco <em>firme del personale</em></h1>
-  <p class="lead">Carica l'elenco del personale (il file .xls scaricato dal gestionale), scegli chi deve firmare e stampa il foglio firme o salvalo in PDF.
+  <p class="lead">Carica l'elenco del personale (il file .xls scaricato dal gestionale), scegli il tipo di elenco e chi deve firmare: il foglio firme si stampa, si salva in PDF o si scarica in Word.
     L'elenco resta <b>solo in questo browser</b>: non viene inviato a nessuno.</p>
 
   <!-- 1. caricamento -->
@@ -226,22 +253,35 @@ footer { margin-top: 30px; display: flex; flex-wrap: wrap; align-items: center; 
 
       <aside class="opz vetro" aria-label="Foglio firme">
         <h2>Foglio firme</h2>
-        <label class="c">Oggetto<input type="text" id="o-ogg" placeholder="es. Collegio dei docenti, presa visione circolare n. …"></label>
-        <div class="due">
-          <label class="c">Data<input type="date" id="o-data"></label>
-          <label class="c">Righe vuote in fondo<input type="number" id="o-vuote" min="0" max="30" value="3"></label>
-        </div>
-        <div class="spunte">
-          <label><input type="checkbox" id="o-cf"> Codice fiscale</label>
-          <label><input type="checkbox" id="o-qual" checked> Qualifica e ordine</label>
-          <label><input type="checkbox" id="o-plesso" checked> Plesso</label>
-          <label><input type="checkbox" id="o-ore"> Ora di entrata e di uscita</label>
-        </div>
-        <label class="c">Ordine<select id="o-ordina">
-          <option value="alfa">Alfabetico</option><option value="plesso">Per plesso, poi alfabetico</option><option value="cat">Per qualifica, poi alfabetico</option></select></label>
-        <button class="btn pieno grande" type="button" id="b-stampa">Stampa o salva in PDF</button>
+        <label class="c">Tipo di elenco<select id="o-tipo" class="tipo"></select></label>
+        <p class="nota" id="o-desc"></p>
+        <div class="campi" id="o-campi"></div>
+        <details class="colonne">
+          <summary>Colonne e impaginazione</summary>
+          <div class="spunte">
+            <label><input type="checkbox" id="o-doppia"> Doppia firma (entrata e uscita)</label>
+            <label><input type="checkbox" id="o-ore"> Ora accanto a ogni firma</label>
+            <label><input type="checkbox" id="o-qual"> Qualifica</label>
+            <label><input type="checkbox" id="o-plesso"> Plesso</label>
+            <label><input type="checkbox" id="o-cf"> Codice fiscale</label>
+            <label><input type="checkbox" id="o-note"> Colonna «Note»</label>
+            <label><input type="checkbox" id="o-perplesso"> Un foglio per ogni plesso</label>
+          </div>
+          <div class="due">
+            <label class="c">Ordine<select id="o-ordina">
+              <option value="alfa">Alfabetico</option><option value="plesso">Per plesso</option><option value="cat">Per qualifica</option></select></label>
+            <label class="c">Righe vuote<input type="number" id="o-vuote" min="0" max="30" value="3"></label>
+          </div>
+        </details>
+        <p class="nota" id="o-riassunto"></p>
+        <button class="btn pieno grande" type="button" id="b-stampa">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="7" rx="1"/></svg>
+          Stampa o salva in PDF</button>
+        <button class="btn grande word" type="button" id="b-word">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M8.5 12l1.2 5 1.8-4 1.8 4 1.2-5"/></svg>
+          Scarica in Word</button>
         <button class="btn" type="button" id="b-excel">Scarica i firmatari in Excel</button>
-        <p class="nota">Per il PDF: nella finestra di stampa scegli «Salva come PDF».</p>
+        <p class="nota">Per il PDF: nella finestra di stampa scegli «Salva come PDF». Il file Word (.docx) si apre anche con LibreOffice e Google Documenti.</p>
       </aside>
     </div>
   </div>
@@ -385,6 +425,7 @@ function disegna() {
     <td class="cf">${esc(p.cf)}</td></tr>`).join('');
   $('vuoto').hidden = elenco.length > 0;
   $('n-sel').textContent = elenco.filter((p) => !esclusi.has(p.cf)).length;
+  if ($('o-tipo').options.length) riassunto();
 }
 
 function mostra() {
@@ -417,6 +458,7 @@ $('righe').addEventListener('change', (e) => {
     e.target.checked ? esclusi.delete(p.cf) : esclusi.add(p.cf);
     tr.classList.toggle('fuori', !e.target.checked);
     $('n-sel').textContent = filtrati().filter((x) => !esclusi.has(x.cf)).length;
+    riassunto();
   } else if (e.target.tagName === 'SELECT') {
     p.plesso = e.target.value; e.target.classList.toggle('vuoto', !p.plesso);
     salva(); mostra();
@@ -435,41 +477,311 @@ $('b-assegna').addEventListener('click', () => {
 const selezionati = () => filtrati().filter((p) => !esclusi.has(p.cf));
 const confronta = (modo) => (a, b) => {
   const alfa = (a.cognome + ' ' + a.nome).localeCompare(b.cognome + ' ' + b.nome, 'it');
-  if (modo === 'plesso') return (a.plesso || 'zzz').localeCompare(b.plesso || 'zzz', 'it') || alfa;
+  if (modo === 'plesso') return ordinePlesso(a.plesso) - ordinePlesso(b.plesso) || alfa;
   if (modo === 'cat') return (a.cat + qualifica(a) + a.ordine).localeCompare(b.cat + qualifica(b) + b.ordine, 'it') || alfa;
   return alfa;
 };
+const ordinePlesso = (x) => (x ? (PLESSI.indexOf(x) + 1 || 50) : 99);
 const nomeGruppo = () => {
   const parti = [GRUPPI.find((x) => x[0] === gruppo)[1]];
   if ($('f-plesso').value) parti.push($('f-plesso').value === '-' ? 'senza plesso' : $('f-plesso').value);
   if ($('f-ruolo').value) parti.push($('f-ruolo').value.toLowerCase());
   return parti.join(' · ');
 };
+const oggi = () => new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+const dataLunga = (iso) => (iso ? new Date(iso + 'T12:00').toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : '');
+const dataBreve = (iso) => (iso ? new Date(iso + 'T12:00').toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '');
+const orario = (v) => (v.inizio && v.fine ? `dalle ${v.inizio} alle ${v.fine}` : v.inizio ? `dalle ${v.inizio}` : v.fine ? `fino alle ${v.fine}` : '');
+const annoScolastico = (iso) => { const d = iso ? new Date(iso + 'T12:00') : new Date(); const y = d.getMonth() >= 8 ? d.getFullYear() : d.getFullYear() - 1; return `${y}/${y + 1}`; };
+const ORGANI = ['Collegio dei docenti', 'Collegio dei docenti – sezione infanzia', 'Collegio dei docenti – sezione primaria', 'Collegio dei docenti – sezione secondaria',
+  'Consiglio di classe', 'Consiglio di interclasse', 'Consiglio di intersezione', 'Dipartimento disciplinare', 'Gruppo di lavoro per l’inclusione (GLI)', 'Commissione'];
+
+// campi riutilizzati dai tipi di elenco
+const C = {
+  data: { id: 'data', l: 'Data', t: 'date', def: oggi },
+  inizio: { id: 'inizio', l: 'Dalle ore', t: 'time' },
+  fine: { id: 'fine', l: 'Alle ore', t: 'time' },
+  luogo: { id: 'luogo', l: 'Luogo', ph: 'es. Aula magna – Secondaria di Almese', largo: true },
+};
+// Tipi di elenco: testo del documento, campi da chiedere, colonne e filtri proposti
+const TIPI = [
+  { id: 'collegio', nome: 'Riunione collegiale', desc: 'Collegio dei docenti, consigli di classe, interclasse e intersezione, dipartimenti: firma all’entrata e all’uscita.',
+    campi: [{ id: 'organo', l: 'Organo collegiale', lista: ORGANI, def: () => 'Collegio dei docenti', largo: true }, C.data, C.inizio, C.fine, C.luogo],
+    titolo: () => 'Foglio presenze', sotto: (v) => v.organo || 'Riunione collegiale',
+    info: (v) => [['Data', dataLunga(v.data)], ['Orario', orario(v)], ['Luogo', v.luogo]],
+    gruppo: 'doc', opz: { doppia: true, ore: true, qual: true, plesso: false, cf: false, note: false, perplesso: false, ordina: 'alfa', vuote: 3 },
+    firme: ['Il Segretario verbalizzante', 'Il Presidente'] },
+  { id: 'sciopero', nome: 'Sciopero – presenze in servizio', desc: 'Rilevazione del personale in servizio nel giorno di sciopero: un foglio per ogni plesso.',
+    campi: [C.data, { id: 'indetto', l: 'Sciopero indetto da', ph: 'es. FLC CGIL, UIL Scuola…', largo: true }, { id: 'durata', l: 'Durata', def: () => 'intera giornata' }],
+    titolo: () => 'Rilevazione presenze', sotto: (v) => 'Sciopero' + (v.indetto ? ' indetto da ' + v.indetto : ''),
+    info: (v) => [['Data', dataLunga(v.data)], ['Durata', v.durata]],
+    testo: () => 'Il personale in servizio appone la propria firma all’inizio del servizio. La firma attesta la presenza in servizio ai fini della rilevazione dello sciopero (L. 146/1990).',
+    gruppo: 'tutti', firma: 'Firma di presenza', opz: { doppia: false, ore: true, qual: true, plesso: false, cf: false, note: true, perplesso: true, ordina: 'alfa', vuote: 3 },
+    firme: ['Il Responsabile di plesso', 'Il Dirigente Scolastico'] },
+  { id: 'assemblea', nome: 'Assemblea sindacale', desc: 'Partecipazione all’assemblea in orario di servizio: firma all’entrata e all’uscita.',
+    campi: [C.data, C.inizio, C.fine, { id: 'sigla', l: 'Indetta da', ph: 'es. FLC CGIL' }, C.luogo],
+    titolo: () => 'Foglio presenze', sotto: (v) => 'Assemblea sindacale' + (v.sigla ? ' indetta da ' + v.sigla : ''),
+    info: (v) => [['Data', dataLunga(v.data)], ['Orario', orario(v)], ['Luogo', v.luogo]],
+    gruppo: 'tutti', opz: { doppia: true, ore: true, qual: true, plesso: true, cf: false, note: false, perplesso: false, ordina: 'alfa', vuote: 3 },
+    firme: ['Il Dirigente Scolastico'] },
+  { id: 'giornaliero', nome: 'Ingresso e uscita dall’edificio', desc: 'Registro giornaliero delle presenze: ora e firma di entrata e di uscita, un foglio per ogni plesso.',
+    campi: [C.data],
+    titolo: () => 'Registro presenze giornaliero', sotto: () => 'Ingresso e uscita dall’edificio scolastico',
+    info: (v) => [['Giorno', dataLunga(v.data)]],
+    gruppo: 'tutti', opz: { doppia: true, ore: true, qual: true, plesso: false, cf: false, note: false, perplesso: true, ordina: 'alfa', vuote: 4 },
+    firme: ['Il Responsabile di plesso'] },
+  { id: 'formazione', nome: 'Corso di formazione', desc: 'Attestazione delle ore di formazione: firma all’entrata e all’uscita.',
+    campi: [{ id: 'corso', l: 'Titolo del corso', largo: true }, { id: 'relatore', l: 'Formatore', largo: true }, C.data, C.inizio, C.fine, C.luogo],
+    titolo: () => 'Foglio presenze', sotto: (v) => v.corso || 'Attività di formazione',
+    info: (v) => [['Data', dataLunga(v.data)], ['Orario', orario(v)], ['Formatore', v.relatore], ['Luogo', v.luogo]],
+    gruppo: 'doc', opz: { doppia: true, ore: true, qual: true, plesso: false, cf: false, note: false, perplesso: false, ordina: 'alfa', vuote: 3 },
+    firme: ['Il Formatore', 'Il Dirigente Scolastico'] },
+  { id: 'visione', nome: 'Presa visione di un documento', desc: 'Circolari, regolamenti, piano di emergenza, informative: data e firma per presa visione.',
+    campi: [{ id: 'documento', l: 'Documento', ph: 'es. Circolare n. 38 – Divieto di fumo', largo: true }, { id: 'data', l: 'Consegnato il', t: 'date', def: oggi }],
+    titolo: () => 'Presa visione', sotto: (v) => v.documento || 'Documento',
+    info: (v) => [['Consegnato il', dataLunga(v.data)]],
+    testo: () => 'Il personale sottoscritto dichiara di aver ricevuto e preso visione del documento indicato.',
+    gruppo: 'tutti', colData: true, firma: 'Firma per presa visione', opz: { doppia: false, ore: false, qual: true, plesso: true, cf: false, note: false, perplesso: false, ordina: 'alfa', vuote: 3 },
+    firme: ['Il Dirigente Scolastico'] },
+  { id: 'libero', nome: 'Elenco personalizzato', desc: 'Titolo, sottotitolo e colonne a scelta.',
+    campi: [{ id: 'titolo', l: 'Titolo', def: () => 'Foglio firme', largo: true }, { id: 'sottotitolo', l: 'Sottotitolo', ph: 'es. Uscita didattica a Torino', largo: true }, C.data, C.luogo],
+    titolo: (v) => v.titolo || 'Foglio firme', sotto: (v) => v.sottotitolo,
+    info: (v) => [['Data', dataLunga(v.data)], ['Luogo', v.luogo]],
+    gruppo: null, opz: { doppia: false, ore: false, qual: true, plesso: true, cf: false, note: false, perplesso: false, ordina: 'alfa', vuote: 3 },
+    firme: ['Il Dirigente Scolastico'] },
+];
+const OPZ = ['doppia', 'ore', 'qual', 'plesso', 'cf', 'note', 'perplesso'];
+const tipoScelto = () => TIPI.find((t) => t.id === $('o-tipo').value) || TIPI[0];
+const valori = () => Object.fromEntries(tipoScelto().campi.map((c) => [c.id, ($('c-' + c.id)?.value || '').trim()]));
+
+function scegliTipo() {
+  const t = tipoScelto();
+  $('o-desc').textContent = t.desc;
+  $('o-campi').innerHTML = t.campi.map((c) => `<label class="c${c.largo ? ' largo' : ''}">${esc(c.l)}
+    <input id="c-${c.id}" type="${c.t || 'text'}" ${c.ph ? `placeholder="${esc(c.ph)}"` : ''} ${c.lista ? `list="l-${c.id}"` : ''} value="${esc(c.def ? c.def() : '')}">
+    ${c.lista ? `<datalist id="l-${c.id}">${c.lista.map((x) => `<option value="${esc(x)}">`).join('')}</datalist>` : ''}</label>`).join('');
+  OPZ.forEach((k) => { $('o-' + k).checked = !!t.opz[k]; });
+  $('o-ordina').value = t.opz.ordina; $('o-vuote').value = t.opz.vuote;
+  if (t.gruppo && db) { gruppo = t.gruppo; esclusi.clear(); disegnaGruppi(); disegna(); }
+  riassunto();
+}
+
+/* il documento, uguale per la stampa e per Word */
+function colonne(t, o) {
+  const c = [{ k: 'n', h: 'N.', mm: 9 }, { k: 'nome', h: 'Cognome e nome', mm: 45, cresce: 1 }];
+  if (o.qual) c.push({ k: 'qual', h: 'Qualifica', mm: 27 });
+  if (o.plesso) c.push({ k: 'plesso', h: 'Plesso', mm: 31 });
+  if (o.cf) c.push({ k: 'cf', h: 'Codice fiscale', mm: 37 });
+  if (t.colData) c.push({ k: '', h: 'Data', mm: 20 });
+  if (o.doppia) {
+    if (o.ore) c.push({ k: '', h: 'Ora entrata', mm: 15 });
+    c.push({ k: '', h: 'Firma entrata', mm: 36, cresce: 2, firma: 1 });
+    if (o.ore) c.push({ k: '', h: 'Ora uscita', mm: 15 });
+    c.push({ k: '', h: 'Firma uscita', mm: 36, cresce: 2, firma: 1 });
+  } else {
+    if (o.ore) c.push({ k: '', h: 'Ora', mm: 15 });
+    c.push({ k: '', h: t.firma || 'Firma', mm: 46, cresce: 3, firma: 1 });
+  }
+  if (o.note) c.push({ k: '', h: 'Note', mm: 26, cresce: 1 });
+  const somma = c.reduce((s, x) => s + x.mm, 0);
+  const orizzontale = somma > 188;
+  const extra = (orizzontale ? 275 : 188) - somma, pesi = c.reduce((s, x) => s + (x.cresce || 0), 0);
+  c.forEach((x) => { x.mm += extra * (x.cresce || 0) / pesi; });
+  return { c, orizzontale };
+}
+
+function modello() {
+  const t = tipoScelto(), v = valori();
+  const o = Object.fromEntries(OPZ.map((k) => [k, $('o-' + k).checked]));
+  const persone = selezionati().sort(confronta(o.perplesso ? 'alfa' : $('o-ordina').value));
+  const vuote = Math.max(0, Math.min(30, +$('o-vuote').value || 0));
+  const fp = $('f-plesso').value;
+  let sezioni;
+  if (o.perplesso) {
+    const m = new Map();
+    persone.forEach((p) => { const k = p.plesso || ''; if (!m.has(k)) m.set(k, []); m.get(k).push(p); });
+    sezioni = [...m].sort((a, b) => ordinePlesso(a[0]) - ordinePlesso(b[0])).map(([k, r]) => ({ plesso: k || 'Plesso non assegnato', righe: r }));
+  } else sezioni = [{ plesso: fp && fp !== '-' ? fp : '', righe: persone }];
+  const { c, orizzontale } = colonne(t, o);
+  return { t, v, o, cols: c, orizzontale, vuote, sezioni, totale: persone.length,
+    titolo: t.titolo(v), sotto: t.sotto(v) || '', info: t.info(v).filter((x) => x[1]), testo: t.testo ? t.testo(v) : '',
+    firme: t.firme, as: annoScolastico(v.data), data: v.data };
+}
+
+const qualBreve = (p) => qualifica(p) + (p.ordine ? ' · ' + p.ordine.toLowerCase() : '');
+const valoreCella = (col, p) => (!p ? '' : col.k === 'nome' ? null : col.k === 'qual' ? qualBreve(p) : col.k === 'plesso' ? p.plesso : col.k === 'cf' ? p.cf : '');
+
+function riassunto() {
+  if (!db) return;
+  const m = modello();
+  $('o-riassunto').innerHTML = `<b>${m.totale}</b> firmatari · ${m.cols.length} colonne · A4 ${m.orizzontale ? 'orizzontale' : 'verticale'}` +
+    (m.o.perplesso ? ` · ${m.sezioni.length} ${m.sezioni.length === 1 ? 'foglio' : 'fogli'} (uno per plesso)` : '');
+}
+
+const SCUOLA_SOTTO = 'Almese (TO) · Codice meccanografico TOIC82100C';
+const cssStringa = (s) => '"' + String(s).replace(/[\\"]/g, '\\$&').replace(/\n/g, ' ') + '"';
+
+function foglioHtml(m) {
+  const sez = m.sezioni.map((s) => {
+    const n = s.righe.length;
+    const info = m.info.concat(s.plesso ? [['Plesso', s.plesso]] : [], [['Nominativi', String(n)]]);
+    const riga = (p, i) => `<tr><td class="n">${i}</td>` + m.cols.slice(1).map((col) => col.k === 'nome'
+      ? `<td class="nome">${p ? `<b>${esc(p.cognome)}</b> ${esc(p.nome)}` : ''}</td>`
+      : `<td class="${col.k || (col.firma ? 'firma' : '')}">${esc(valoreCella(col, p))}</td>`).join('') + '</tr>';
+    return `<section class="sez">
+      <div class="intest"><div class="scuola"><b>ISTITUTO COMPRENSIVO DI ALMESE</b><span>${esc(SCUOLA_SOTTO)}</span></div>
+        <div class="as">Anno scolastico<b>${esc(m.as)}</b></div></div>
+      <div class="titolo"><span class="occhiello">${esc(m.t.nome)}</span><h2>${esc(m.titolo)}</h2>${m.sotto ? `<p>${esc(m.sotto)}</p>` : ''}</div>
+      <div class="info">${info.map(([l, x]) => `<div><small>${esc(l)}</small><b>${esc(x)}</b></div>`).join('')}</div>
+      ${m.testo ? `<p class="testo">${esc(m.testo)}</p>` : ''}
+      <table><colgroup>${m.cols.map((col) => `<col style="width:${col.mm.toFixed(1)}mm">`).join('')}</colgroup>
+        <thead><tr>${m.cols.map((col) => `<th>${esc(col.h)}</th>`).join('')}</tr></thead>
+        <tbody>${s.righe.map((p, i) => riga(p, i + 1)).join('')}${Array.from({ length: m.vuote }, (_, k) => riga(null, n + k + 1)).join('')}</tbody></table>
+      <div class="chiusura"><div class="conta">Presenti n. ________ su ${n}</div>
+        <div class="firme">${m.firme.map((l) => `<div><span>${esc(l)}</span><i></i></div>`).join('')}</div></div>
+    </section>`;
+  }).join('');
+  const pagina = `@page { size: A4 ${m.orizzontale ? 'landscape' : 'portrait'}; margin: 11mm 11mm 13mm;
+    @bottom-left { content: ${cssStringa('I.C. Almese · ' + m.titolo + (m.sotto ? ' – ' + m.sotto : ''))}; font: 7pt Arial, sans-serif; color: #7a8496; }
+    @bottom-right { content: "Pagina " counter(page) " di " counter(pages); font: 7pt Arial, sans-serif; color: #7a8496; } }`;
+  return { sez, pagina };
+}
 
 $('b-stampa').addEventListener('click', () => {
-  const el = selezionati().sort(confronta($('o-ordina').value));
-  if (!el.length) return alert('Non c’è nessun firmatario: controlla i filtri.');
-  const cf = $('o-cf').checked, qual = $('o-qual').checked, ple = $('o-plesso').checked, ore = $('o-ore').checked;
-  const vuote = Math.max(0, Math.min(30, +$('o-vuote').value || 0));
-  const d = $('o-data').value ? new Date($('o-data').value + 'T12:00').toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '';
-  const celle = (p, i) => `<td class="n">${i}</td><td>${p ? `<b>${esc(p.cognome)}</b> ${esc(p.nome)}` : ''}</td>` +
-    (cf ? `<td class="cf">${p ? esc(p.cf) : ''}</td>` : '') +
-    (qual ? `<td>${p ? esc(qualifica(p) + (p.ordine ? ' ' + p.ordine.toLowerCase() : '')) : ''}</td>` : '') +
-    (ple ? `<td>${p ? esc(p.plesso) : ''}</td>` : '') +
-    (ore ? '<td class="ora"></td><td class="ora"></td>' : '') + '<td class="firma"></td>';
-  const corpo = el.map((p, i) => `<tr>${celle(p, i + 1)}</tr>`).join('') +
-    Array.from({ length: vuote }, (_, k) => `<tr>${celle(null, el.length + k + 1)}</tr>`).join('');
-  $('foglio').innerHTML = `<div class="intest"><b>${esc(SCUOLA.toUpperCase())}</b><div>Almese (TO)</div></div>
-    <h2>Foglio firme</h2>
-    ${$('o-ogg').value.trim() ? `<p class="ogg"><b>${esc($('o-ogg').value.trim())}</b></p>` : ''}
-    <div class="info"><span>${esc(nomeGruppo())} — ${el.length} nominativi</span><span>${d ? 'Data: ' + esc(d) : 'Data: ____ / ____ / ________'}</span></div>
-    <table><thead><tr><th>N.</th><th>Cognome e nome</th>${cf ? '<th>Codice fiscale</th>' : ''}${qual ? '<th>Qualifica</th>' : ''}${ple ? '<th>Plesso</th>' : ''}${ore ? '<th class="ora">Entrata</th><th class="ora">Uscita</th>' : ''}<th class="firma">Firma</th></tr></thead>
-    <tbody>${corpo}</tbody></table>
-    <div class="piede"><span>Presenti n. ______</span><span>Il Dirigente Scolastico / Il segretario ____________________________</span></div>`;
+  const m = modello();
+  if (!m.totale) return alert('Non c’è nessun firmatario: controlla i filtri.');
+  const f = foglioHtml(m);
+  $('foglio').innerHTML = f.sez;
+  $('pagina-stampa').textContent = f.pagina;
   const prima = document.title;
-  document.title = 'Foglio firme' + ($('o-ogg').value.trim() ? ' - ' + $('o-ogg').value.trim().slice(0, 60) : '') + (d ? ' - ' + d.replace(/\//g, '-') : '');
+  document.title = nomeFile(m, '');
   window.print();
   document.title = prima;
+});
+
+const nomeFile = (m, est) => ('Foglio firme - ' + m.t.nome + (m.sotto && m.sotto !== m.t.nome ? ' - ' + m.sotto : '') + (m.data ? ' - ' + dataBreve(m.data).replace(/\//g, '-') : ''))
+  .replace(/[\\/:*?"<>|]+/g, '-').replace(/\s+/g, ' ').slice(0, 120) + est;
+
+/* ---------------- Word (.docx) ---------------- */
+const X = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const TW = 56.6929; // twip per mm
+const BLU = '1F3A68', ACCENTO = '2457D6', GRIGIO = '6A768A', BORDO = '9AA6B8', ZEBRA = 'F4F7FB';
+function wRun(testo, o = {}) {
+  const pr = (o.b ? '<w:b/>' : '') + (o.i ? '<w:i/>' : '') + (o.caps ? '<w:caps/>' : '') + (o.color ? `<w:color w:val="${o.color}"/>` : '') +
+    (o.sp ? `<w:spacing w:val="${o.sp}"/>` : '') + (o.sz ? `<w:sz w:val="${o.sz}"/><w:szCs w:val="${o.sz}"/>` : '');
+  return `<w:r>${pr ? `<w:rPr>${pr}</w:rPr>` : ''}<w:t xml:space="preserve">${X(testo)}</w:t></w:r>`;
+}
+function wPar(runs, o = {}) {
+  const pr = (o.keep ? '<w:keepNext/>' : '') + (o.bordoSotto ? `<w:pBdr><w:bottom w:val="single" w:sz="${o.bordoSotto}" w:space="4" w:color="${o.coloreBordo || BLU}"/></w:pBdr>` : '') +
+    (o.tab ? `<w:tabs><w:tab w:val="right" w:pos="${o.tab}"/></w:tabs>` : '') +
+    `<w:spacing w:before="${o.prima || 0}" w:after="${o.dopo || 0}"/>` + (o.jc ? `<w:jc w:val="${o.jc}"/>` : '');
+  return `<w:p><w:pPr>${pr}</w:pPr>${runs}</w:p>`;
+}
+const bordi = (col, sz = 4, tipi = ['top', 'left', 'bottom', 'right', 'insideH', 'insideV']) =>
+  tipi.map((t) => `<w:${t} w:val="${col ? 'single' : 'nil'}" w:sz="${sz}" w:space="0" w:color="${col || 'auto'}"/>`).join('');
+function wCella(contenuto, larg, o = {}) {
+  return `<w:tc><w:tcPr><w:tcW w:w="${Math.round(larg)}" w:type="dxa"/>${o.bordi ? `<w:tcBorders>${o.bordi}</w:tcBorders>` : ''}` +
+    `${o.fill ? `<w:shd w:val="clear" w:color="auto" w:fill="${o.fill}"/>` : ''}<w:vAlign w:val="${o.v || 'center'}"/></w:tcPr>${contenuto || '<w:p/>'}</w:tc>`;
+}
+const wTab = (larghe, righe, o = {}) => `<w:tbl><w:tblPr><w:tblW w:w="${Math.round(larghe.reduce((a, b) => a + b, 0))}" w:type="dxa"/>` +
+  `${o.jc ? `<w:jc w:val="${o.jc}"/>` : ''}<w:tblBorders>${o.bordi ?? bordi(BORDO)}</w:tblBorders><w:tblLayout w:type="fixed"/>` +
+  `<w:tblCellMar><w:top w:w="${o.mT ?? 0}" w:type="dxa"/><w:left w:w="85" w:type="dxa"/><w:bottom w:w="${o.mT ?? 0}" w:type="dxa"/><w:right w:w="85" w:type="dxa"/></w:tblCellMar></w:tblPr>` +
+  `<w:tblGrid>${larghe.map((l) => `<w:gridCol w:w="${Math.round(l)}"/>`).join('')}</w:tblGrid>${righe}</w:tbl>`;
+
+function docx(m) {
+  const pagW = m.orizzontale ? 16838 : 11906, pagH = m.orizzontale ? 11906 : 16838, marg = 624;
+  const utile = pagW - 2 * marg;
+  const scala = utile / m.cols.reduce((s, c) => s + c.mm * TW, 0);
+  const larghe = m.cols.map((c) => c.mm * TW * scala);
+  let corpo = '';
+  m.sezioni.forEach((s, iS) => {
+    const n = s.righe.length;
+    if (iS) corpo += '<w:p><w:r><w:br w:type="page"/></w:r></w:p>';
+    corpo += wPar(wRun(m.t.nome, { b: 1, caps: 1, sp: 30, sz: 16, color: ACCENTO }), { jc: 'center', prima: 160, dopo: 20 });
+    corpo += wPar(wRun(m.titolo, { b: 1, sz: 38, color: BLU }), { jc: 'center', dopo: m.sotto ? 20 : 200 });
+    if (m.sotto) corpo += wPar(wRun(m.sotto, { sz: 24 }), { jc: 'center', dopo: 200 });
+    const info = m.info.concat(s.plesso ? [['Plesso', s.plesso]] : [], [['Nominativi', String(n)]]);
+    const li = info.map(([l, x]) => (l === 'Nominativi' ? 0.55 : l === 'Data' || l === 'Giorno' || l === 'Consegnato il' ? 1.6 : 1.2));
+    const tot = li.reduce((a, b) => a + b, 0);
+    corpo += wTab(li.map((x) => (x / tot) * utile), '<w:tr>' + info.map(([l, x], i) => wCella(
+      wPar(wRun(l, { caps: 1, sz: 13, color: GRIGIO, sp: 10 }), { dopo: 10 }) + wPar(wRun(x, { b: 1, sz: 19 })), (li[i] / tot) * utile)).join('') + '</w:tr>',
+    { bordi: bordi('B8C2D3', 4, ['top', 'left', 'bottom', 'right', 'insideV']), mT: 70 });
+    corpo += wPar('', { dopo: 120 });
+    if (m.testo) corpo += wPar(wRun(m.testo, { i: 1, sz: 17, color: '333333' }), { dopo: 120 });
+    const testa = '<w:tr><w:trPr><w:tblHeader/><w:cantSplit/><w:trHeight w:val="400"/></w:trPr>' + m.cols.map((c, i) =>
+      wCella(wPar(wRun(c.h, { b: 1, caps: 1, sz: 14, color: 'FFFFFF', sp: 6 }), { jc: c.k === 'n' ? 'center' : 'left' }), larghe[i], { fill: BLU })).join('') + '</w:tr>';
+    const riga = (p, num, pari) => '<w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="500" w:hRule="atLeast"/></w:trPr>' + m.cols.map((c, i) => {
+      let r;
+      if (c.k === 'n') r = wPar(wRun(num, { sz: 15, color: GRIGIO }), { jc: 'center' });
+      else if (c.k === 'nome') r = wPar(p ? wRun(p.cognome, { b: 1, sz: 19 }) + wRun(' ' + p.nome, { sz: 19 }) : '');
+      else r = wPar(wRun(valoreCella(c, p), { sz: c.k === 'cf' ? 16 : 15, color: '333333' }));
+      return wCella(r, larghe[i], pari ? { fill: ZEBRA } : {});
+    }).join('') + '</w:tr>';
+    corpo += wTab(larghe, testa + s.righe.map((p, i) => riga(p, i + 1, i % 2)).join('') +
+      Array.from({ length: m.vuote }, (_, k) => riga(null, n + k + 1, (n + k) % 2)).join(''));
+    // chiusura: presenti e firme
+    const lf = Math.min(3600, (utile * 0.62) / m.firme.length), lc = utile - lf * m.firme.length;
+    const firme = m.firme.map((l) => wCella(wPar(wRun(l, { sz: 16, color: '444444' }), { jc: 'center', dopo: 480, keep: 1 }) +
+      wPar('', { bordoSotto: 6, coloreBordo: '000000' }), lf, { v: 'bottom' })).join('');
+    corpo += wPar('', { dopo: 240, keep: 1 });
+    corpo += wTab([lc].concat(m.firme.map(() => lf)), '<w:tr><w:trPr><w:cantSplit/></w:trPr>' +
+      wCella(wPar(wRun('Presenti n. ________ su ' + n, { sz: 19 })), lc, { v: 'bottom' }) + firme + '</w:tr>', { bordi: bordi(null) });
+  });
+  const ns = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"';
+  const documento = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document ${ns}><w:body>${corpo}` +
+    `<w:sectPr><w:headerReference w:type="default" r:id="rIdH"/><w:footerReference w:type="default" r:id="rIdF"/>` +
+    `<w:pgSz w:w="${pagW}" w:h="${pagH}"${m.orizzontale ? ' w:orient="landscape"' : ''}/>` +
+    `<w:pgMar w:top="1080" w:right="${marg}" w:bottom="900" w:left="${marg}" w:header="454" w:footer="397" w:gutter="0"/></w:sectPr></w:body></w:document>`;
+  const intest = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:hdr ${ns}>` +
+    wPar(wRun('ISTITUTO COMPRENSIVO DI ALMESE', { b: 1, sz: 22, color: BLU, sp: 16 }) + '<w:r><w:tab/></w:r>' +
+      wRun('ANNO SCOLASTICO ', { sz: 13, color: GRIGIO, sp: 16 }) + wRun(m.as, { b: 1, sz: 18, color: BLU }), { tab: utile }) +
+    wPar(wRun(SCUOLA_SOTTO, { sz: 15, color: GRIGIO }), { bordoSotto: 12, coloreBordo: BLU, dopo: 0 }) + '</w:hdr>';
+  const campo = (c) => `<w:r><w:rPr><w:sz w:val="14"/><w:color w:val="7A8496"/></w:rPr><w:fldChar w:fldCharType="begin"/></w:r><w:r><w:rPr><w:sz w:val="14"/><w:color w:val="7A8496"/></w:rPr><w:instrText xml:space="preserve"> ${c} </w:instrText></w:r><w:r><w:rPr><w:sz w:val="14"/><w:color w:val="7A8496"/></w:rPr><w:fldChar w:fldCharType="separate"/></w:r><w:r><w:rPr><w:sz w:val="14"/><w:color w:val="7A8496"/></w:rPr><w:t>1</w:t></w:r><w:r><w:rPr><w:sz w:val="14"/><w:color w:val="7A8496"/></w:rPr><w:fldChar w:fldCharType="end"/></w:r>`;
+  const piede = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:ftr ${ns}>` +
+    wPar(wRun('I.C. Almese · ' + m.titolo + (m.sotto ? ' – ' + m.sotto : ''), { sz: 14, color: '7A8496' }) + '<w:r><w:tab/></w:r>' +
+      wRun('Pagina ', { sz: 14, color: '7A8496' }) + campo('PAGE') + wRun(' di ', { sz: 14, color: '7A8496' }) + campo('NUMPAGES'), { tab: utile }) + '</w:ftr>';
+  const stili = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles ${ns}><w:docDefaults><w:rPrDefault><w:rPr>` +
+    `<w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:eastAsia="Calibri" w:cs="Calibri"/><w:sz w:val="20"/><w:szCs w:val="20"/><w:lang w:val="it-IT"/></w:rPr></w:rPrDefault>` +
+    `<w:pPrDefault><w:pPr><w:spacing w:after="0" w:line="240" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults>` +
+    `<w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/></w:style>` +
+    `<w:style w:type="table" w:default="1" w:styleId="TableNormal"><w:name w:val="Normal Table"/><w:tblPr><w:tblInd w:w="0" w:type="dxa"/>` +
+    `<w:tblCellMar><w:top w:w="0" w:type="dxa"/><w:left w:w="108" w:type="dxa"/><w:bottom w:w="0" w:type="dxa"/><w:right w:w="108" w:type="dxa"/></w:tblCellMar></w:tblPr></w:style></w:styles>`;
+  const file = {
+    '[Content_Types].xml': '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+      '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/>' +
+      '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>' +
+      '<Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>' +
+      '<Override PartName="/word/header1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"/>' +
+      '<Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/>' +
+      '<Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/></Types>',
+    '_rels/.rels': '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+      '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>' +
+      '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/></Relationships>',
+    'docProps/core.xml': '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" ' +
+      'xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' +
+      `<dc:title>${X(m.titolo + (m.sotto ? ' – ' + m.sotto : ''))}</dc:title><dc:creator>Istituto Comprensivo di Almese</dc:creator>` +
+      `<dcterms:created xsi:type="dcterms:W3CDTF">${new Date().toISOString().slice(0, 19)}Z</dcterms:created></cp:coreProperties>`,
+    'word/_rels/document.xml.rels': '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+      '<Relationship Id="rIdS" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>' +
+      '<Relationship Id="rIdH" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="header1.xml"/>' +
+      '<Relationship Id="rIdF" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer1.xml"/></Relationships>',
+    'word/document.xml': documento, 'word/styles.xml': stili, 'word/header1.xml': intest, 'word/footer1.xml': piede,
+  };
+  const zip = XLSX.CFB.utils.cfb_new();
+  const enc = new TextEncoder();
+  Object.entries(file).forEach(([p, s]) => XLSX.CFB.utils.cfb_add(zip, p, enc.encode(s)));
+  return new Uint8Array(XLSX.CFB.write(zip, { fileType: 'zip', type: 'array', compression: true }));
+}
+
+function scarica(dati, nome, tipo) {
+  const url = URL.createObjectURL(new Blob([dati], { type: tipo }));
+  const a = document.createElement('a'); a.href = url; a.download = nome; document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+$('b-word').addEventListener('click', () => {
+  const m = modello();
+  if (!m.totale) return alert('Non c’è nessun firmatario: controlla i filtri.');
+  scarica(docx(m), nomeFile(m, '.docx'), 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
 });
 
 function scaricaExcel(persone, nome) {
@@ -499,9 +811,13 @@ const zona = $('zona');
 ['dragleave', 'drop'].forEach((t) => zona.addEventListener(t, () => zona.classList.remove('sopra')));
 zona.addEventListener('drop', (e) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) apriFile(f); });
 
-$('o-data').value = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+$('o-tipo').innerHTML = TIPI.map((t) => `<option value="${t.id}">${esc(t.nome)}</option>`).join('');
+$('o-tipo').addEventListener('change', scegliTipo);
+document.querySelector('.opz').addEventListener('input', riassunto);
+document.querySelector('.opz').addEventListener('change', riassunto);
 db = leggiMemoria();
 mostra();
+scegliTipo();
 </script>
 </body>
 </html>
