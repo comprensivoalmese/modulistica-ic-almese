@@ -101,6 +101,17 @@ h1 { margin: 18px 0 6px; font-size: clamp(64px, 14vw, 128px); line-height: .9; l
 .utente b { overflow-wrap: anywhere; }
 .porte.chiuse .porta { opacity: .5; filter: saturate(.4); }
 .porte.chiuse .porta:hover { transform: none; }
+.strumento { --c: #6E46FF; --c2: #00B8E6; margin-top: 20px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; padding: 20px 24px;
+  border-radius: 22px; background: var(--glass); border: 1px solid var(--glass-line); box-shadow: var(--shadow); color: inherit; text-decoration: none;
+  backdrop-filter: blur(18px) saturate(1.3); -webkit-backdrop-filter: blur(18px) saturate(1.3); transition: transform .25s cubic-bezier(.2, .8, .2, 1); }
+.strumento:hover { transform: translateY(-3px); }
+.strumento:focus-visible { outline: 3px solid var(--c); outline-offset: 4px; }
+.strumento .ico { width: 54px; height: 54px; border-radius: 16px; }
+.strumento .testo { flex: 1 1 260px; }
+.strumento .tag { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c); }
+.strumento h2 { margin: 2px 0 2px; font-size: 21px; letter-spacing: -.02em; }
+.strumento p { margin: 0; color: var(--muted); font-size: 15px; }
+.strumento .vai { margin: 0; }
 .porte { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 20px; }
 .porta { --c: var(--blu); --c2: var(--blu-2);
   position: relative; display: flex; flex-direction: column; gap: 16px; padding: 26px; border-radius: 24px;
@@ -219,6 +230,20 @@ footer { margin-top: auto; padding-top: 40px; display: flex; flex-wrap: wrap; al
       </span>
     </a>
   </main>
+
+  <a class="strumento" href="firme.html">
+    <div class="ico" aria-hidden="true">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"/><path d="M8 11h3M8 15h3M14 15c1-1.5 1.6-3 2.2-2s-.6 2.4.3 2.4 1-.9 1.5-.9"/></svg>
+    </div>
+    <div class="testo">
+      <span class="tag">Personale · Strumento</span>
+      <h2>Elenco firme del personale</h2>
+      <p>Dall'elenco del personale (.xls) al foglio firme: tutto il personale, docenti, ATA, per ordine di scuola, plesso o contratto.</p>
+    </div>
+    <span class="vai">Apri la gestione
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </span>
+  </a>
 
   <details class="aiuto">
     <summary>Compare «Impossibile aprire il file in questo momento»?</summary>
