@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <title>Wolf Team - Istituto Comprensivo di Almese</title>
+  <defs><linearGradient id="fondo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00D6FF"/><stop offset="1" stop-color="#6E46FF"/></linearGradient></defs>
+  <rect width="512" height="512" rx="112.6" fill="url(#fondo)"/>
+  <polygon points="120.2,75.2 216.1,171.0 256.0,159.0 295.9,171.0 391.8,75.2 399.8,234.9 447.7,298.8 335.9,362.7 256.0,442.6 176.1,362.7 64.3,298.8 112.2,234.9" fill="#FFFFFF"/>
+  <polygon points="256.0,159.0 295.9,171.0 399.8,234.9 447.7,298.8 335.9,362.7 256.0,442.6 256.0,270.8" fill="#D2EBFF"/>
+  <polygon points="144.2,119.1 196.1,175.0 136.2,195.0" fill="#78BEFF"/>
+  <polygon points="367.8,119.1 315.9,175.0 375.8,195.0" fill="#78BEFF"/>
+  <polygon points="164.1,250.9 228.0,262.9 200.1,282.8" fill="#0A286E"/>
+  <polygon points="347.9,250.9 284.0,262.9 311.9,282.8" fill="#0A286E"/>
+  <polygon points="228.0,386.7 284.0,386.7 256.0,422.6" fill="#0A286E"/>
+</svg>

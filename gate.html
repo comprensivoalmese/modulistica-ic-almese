@@ -5,8 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
-<title>Segreteria Moduli</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<title>GATE</title>
+<meta name="description" content="GATE: accesso della segreteria ai moduli del personale e alle autorizzazioni delle famiglie">
+<link rel="icon" type="image/svg+xml" href="icone/gate.svg">
+<link rel="apple-touch-icon" href="icone/gate.svg">
+<meta name="theme-color" content="#1E86C8">
 <style>
 :root {
   --bg: #eef1f8; --bg-2: #f7f8fc; --glass: rgba(255, 255, 255, .72); --glass-line: rgba(255, 255, 255, .9);
@@ -53,18 +57,19 @@ body { margin: 0; min-height: 100vh; min-height: 100dvh; background: linear-grad
   min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
 
 header { display: flex; align-items: center; gap: 12px; }
-.logo { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; color: #fff;
-  background: linear-gradient(135deg, var(--blu), var(--verde)); box-shadow: var(--shadow); }
-header b { display: block; font-size: 15px; }
+.logo { width: 46px; height: 46px; border-radius: 12px; display: block; box-shadow: var(--shadow); }
+header b { display: block; font-size: 18px; letter-spacing: .14em; }
 header span { display: block; font-size: 13px; color: var(--muted); }
 
 .intro { margin: clamp(36px, 8vh, 80px) 0 32px; max-width: 720px; }
 .pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 600;
   background: var(--glass); border: 1px solid var(--glass-line); color: var(--muted); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .pill::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--verde); box-shadow: 0 0 0 4px color-mix(in srgb, var(--verde) 25%, transparent); }
-h1 { font-size: clamp(32px, 6vw, 56px); line-height: 1.05; letter-spacing: -.03em; margin: 16px 0 14px; text-wrap: balance; }
-h1 em { font-style: normal; background: linear-gradient(90deg, var(--blu), var(--verde)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.intro p { margin: 0; font-size: clamp(16px, 2vw, 18px); color: var(--muted); max-width: 60ch; }
+h1 { margin: 18px 0 6px; font-size: clamp(64px, 14vw, 128px); line-height: .9; letter-spacing: .02em; font-weight: 900;
+  background: linear-gradient(100deg, var(--blu) 10%, var(--verde) 90%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.motto { font-size: clamp(22px, 3.6vw, 32px); line-height: 1.15; letter-spacing: -.02em; font-weight: 700; margin: 0 0 12px; text-wrap: balance; }
+.motto em { font-style: normal; background: linear-gradient(90deg, var(--blu), var(--verde)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.intro p:not(.motto) { margin: 0; font-size: clamp(16px, 2vw, 18px); color: var(--muted); max-width: 60ch; }
 
 .porte { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 20px; }
 .porta { --c: var(--blu); --c2: var(--blu-2);
@@ -93,14 +98,20 @@ h1 em { font-style: normal; background: linear-gradient(90deg, var(--blu), var(-
   background: linear-gradient(135deg, var(--c), color-mix(in srgb, var(--c) 70%, var(--c2))); }
 .vai svg { transition: transform .25s; }
 .porta:hover .vai svg { transform: translateX(4px); }
-.chi { font-size: 13px; color: var(--muted); }
 
 .nota { margin-top: 28px; display: flex; gap: 12px; align-items: flex-start; padding: 14px 18px; border-radius: 16px;
   background: var(--glass); border: 1px solid var(--glass-line); color: var(--muted); font-size: 14px;
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .nota svg { flex: none; margin-top: 2px; color: var(--blu); }
 .nota b { color: var(--text); }
-footer { margin-top: auto; padding-top: 32px; font-size: 13px; color: var(--muted); }
+footer { margin-top: auto; padding-top: 40px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 24px;
+  font-size: 13px; color: var(--muted); }
+.wolf { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; }
+.wolf img { width: 36px; height: 36px; border-radius: 9px; box-shadow: 0 8px 18px -8px #6E46FF; }
+.wolf b { display: block; font-size: 14px; font-weight: 900; letter-spacing: .06em; }
+.wolf b span { background: linear-gradient(90deg, #00D6FF, #6E46FF); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.wolf small { display: block; font-size: 12px; color: var(--muted); }
+.credito { margin: 0; max-width: 46ch; }
 
 @media (prefers-reduced-motion: reduce) {
   .sfondo i { animation: none; }
@@ -115,15 +126,14 @@ footer { margin-top: auto; padding-top: 32px; font-size: 13px; color: var(--mute
 
 <div class="pagina">
   <header>
-    <div class="logo" aria-hidden="true">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>
-    </div>
-    <div><b>Istituto Comprensivo di Almese</b><span>Modulistica · Segreteria</span></div>
+    <img class="logo" src="icone/gate.svg" alt="" width="46" height="46">
+    <div><b>GATE</b><span>Istituto Comprensivo di Almese · Modulistica</span></div>
   </header>
 
   <section class="intro">
     <span class="pill">Area riservata alla segreteria</span>
-    <h1>Tutti i moduli, <em>in un solo posto.</em></h1>
+    <h1>GATE</h1>
+    <p class="motto">Tutti i moduli, <em>in un solo posto.</em></p>
     <p>Da qui la segreteria controlla i moduli arrivati dal personale e le autorizzazioni firmate dalle famiglie.</p>
   </section>
 
@@ -141,7 +151,6 @@ footer { margin-top: auto; padding-top: 32px; font-size: 13px; color: var(--mute
       <span class="vai">Apri la gestione
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </span>
-      <span class="chi">a cura di Chiara</span>
     </a>
 
     <a class="porta fam" href="https://script.google.com/a/macros/comprensivoalmese.it/s/AKfycbxhI6NL85P6x9HMAWEvsUzBnnOSKWmOGugHP42J_h-9zZrXvP2PSq2e5dB_3TfC-Kc71Q/exec">
@@ -154,10 +163,9 @@ footer { margin-top: auto; padding-top: 32px; font-size: 13px; color: var(--mute
       </div>
       <p>Il semaforo classe per classe: chi ha firmato, chi manca, cosa va controllato.</p>
       <ul class="punti"><li>semaforo per classe</li><li>conferma verde / giallo</li><li>moduli firmati</li></ul>
-      <span class="vai">Apri il semaforo
+      <span class="vai">Apri la gestione
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </span>
-      <span class="chi">a cura di Andrea Giorda</span>
     </a>
   </main>
 
@@ -166,7 +174,13 @@ footer { margin-top: auto; padding-top: 32px; font-size: 13px; color: var(--mute
     <span>Si entra con l'account <b>@comprensivoalmese.it</b> abilitato alla segreteria. Personale e famiglie compilano i moduli dai link dedicati che ricevono dalla scuola, non da questa pagina.</span>
   </div>
 
-  <footer>Istituto Comprensivo di Almese · Modulistica online</footer>
+  <footer>
+    <div class="wolf">
+      <img src="icone/wolfteam.svg" alt="" width="36" height="36">
+      <div><b>WOLF <span>TEAM</span></b><small>Istituto Comprensivo di Almese</small></div>
+    </div>
+    <p class="credito">Sviluppata dal Wolf Team dell’Istituto Comprensivo di Almese – © 2026 – Tutti i diritti riservati</p>
+  </footer>
 </div>
 </body>
 </html>
