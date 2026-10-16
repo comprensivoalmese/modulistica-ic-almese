@@ -66,7 +66,7 @@ header span { display: block; font-size: 13px; color: var(--muted); }
 .pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 600;
   background: var(--glass); border: 1px solid var(--glass-line); color: var(--muted); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .pill::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--verde); box-shadow: 0 0 0 4px color-mix(in srgb, var(--verde) 25%, transparent); }
-h1 { margin: 18px 0 6px; font-size: clamp(46px, 9vw, 84px); line-height: .9; letter-spacing: .02em; font-weight: 900;
+h1 { margin: 18px 0 6px; font-size: clamp(64px, 14vw, 128px); line-height: .9; letter-spacing: .02em; font-weight: 900;
   background: linear-gradient(100deg, var(--blu) 10%, var(--verde) 90%); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .motto { font-size: clamp(22px, 3.6vw, 32px); line-height: 1.15; letter-spacing: -.02em; font-weight: 700; margin: 0 0 12px; text-wrap: balance; }
 .motto em { font-style: normal; background: linear-gradient(90deg, var(--blu), var(--verde)); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -88,6 +88,11 @@ h1 { margin: 18px 0 6px; font-size: clamp(46px, 9vw, 84px); line-height: .9; let
   background: linear-gradient(135deg, var(--blu), var(--verde)); display: inline-flex; align-items: center; gap: 8px; }
 .btn:focus-visible { outline: 3px solid var(--blu); outline-offset: 3px; }
 .btn.secondario { background: transparent; color: var(--text); border: 1.5px solid var(--line); }
+.aiuto { margin-top: 18px; padding: 16px 20px; border-radius: 16px; background: var(--glass); border: 1px solid var(--glass-line);
+  font-size: 14px; color: var(--muted); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.aiuto summary { cursor: pointer; font-weight: 700; color: var(--text); font-size: 15px; }
+.aiuto ol { margin: 10px 0 4px; padding-left: 20px; display: grid; gap: 6px; }
+.aiuto b { color: var(--text); }
 .errore { flex-basis: 100%; margin: 0; font-size: 14px; color: #d64545; }
 .connesso { flex: 2 1 380px; display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px 14px; }
 .utente { display: flex; align-items: center; gap: 10px; font-weight: 600; min-width: 0; }
@@ -165,7 +170,7 @@ footer { margin-top: auto; padding-top: 40px; display: flex; flex-wrap: wrap; al
   <section class="accesso" aria-labelledby="t-acc">
     <div class="testo">
       <h2 id="t-acc">Accedi con l'account della scuola</h2>
-      <p>Scrivi il tuo account <b>@comprensivoalmese.it</b>: aprendo una gestione, Google ti chiede di confermarlo (e la password, se serve).</p>
+      <p>Scrivi il tuo account <b>@comprensivoalmese.it</b>. Nel browser deve essere l'account Google <b>principale</b> (vedi sotto).</p>
     </div>
     <form id="f-acc" novalidate>
       <label class="campo" for="utente">
@@ -215,6 +220,16 @@ footer { margin-top: auto; padding-top: 40px; display: flex; flex-wrap: wrap; al
     </a>
   </main>
 
+  <details class="aiuto">
+    <summary>Compare «Impossibile aprire il file in questo momento»?</summary>
+    <p>Succede quando nel browser sono aperti più account Google e quello della scuola non è il primo: le gestioni si aprono solo con l'account principale. Rimedi:</p>
+    <ol>
+      <li><b>Consigliato:</b> crea in Chrome o Edge un profilo solo per la scuola (icona del profilo in alto a destra → <i>Aggiungi</i>) ed entra lì con l'account @comprensivoalmese.it.</li>
+      <li>Oppure apri una <b>finestra in incognito</b> (Ctrl+Maiusc+N), entra in Google con l'account della scuola e apri GATE da lì.</li>
+      <li>Oppure esci da tutti gli account Google (foto del profilo → <i>Esci da tutti gli account</i>) e rientra <b>per primo</b> con quello della scuola.</li>
+    </ol>
+  </details>
+
   <div class="nota">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
     <span>Si entra con l'account <b>@comprensivoalmese.it</b> abilitato alla segreteria. Personale e famiglie compilano i moduli dai link dedicati che ricevono dalla scuola, non da questa pagina.</span>
@@ -230,8 +245,8 @@ footer { margin-top: auto; padding-top: 40px; display: flex; flex-wrap: wrap; al
 </div>
 <script>
 // Accesso: la pagina ricorda solo l'account; password e verifica le fa Google quando si apre una gestione.
-// Le due gestioni sono app web riservate al dominio: si aprono passando per la scelta dell'account Google,
-// così non partono con un account personale (gmail) eventualmente già aperto nel browser.
+// Le due gestioni sono app web Apps Script riservate al dominio: Google le apre SOLO con l'account principale
+// del browser (il primo con cui si è entrati). Scegliere un altro account porta a "Impossibile aprire il file".
 const DOMINIO = 'comprensivoalmese.it', CHIAVE = 'gate-account';
 const $ = (id) => document.getElementById(id);
 const app = [...document.querySelectorAll('[data-app]')];
@@ -239,8 +254,6 @@ app.forEach((a) => { a.dataset.url = a.href; });
 
 const leggi = () => { try { return localStorage.getItem(CHIAVE) || ''; } catch (e) { return ''; } };
 const scrivi = (v) => { try { v ? localStorage.setItem(CHIAVE, v) : localStorage.removeItem(CHIAVE); } catch (e) {} };
-const conAccount = (url, email) => 'https://accounts.google.com/AccountChooser?Email=' + encodeURIComponent(email) +
-  '&continue=' + encodeURIComponent(url + (url.includes('?') ? '&' : '?') + 'authuser=' + encodeURIComponent(email));
 
 function mostra(email) {
   $('f-acc').hidden = !!email;
@@ -248,7 +261,7 @@ function mostra(email) {
   $('porte').classList.toggle('chiuse', !email);
   if (email) { $('chi').textContent = email; $('iniziale').textContent = email[0]; }
   app.forEach((a) => {
-    if (email) { a.href = conAccount(a.dataset.url, email); a.removeAttribute('aria-disabled'); }
+    if (email) { a.href = a.dataset.url; a.removeAttribute('aria-disabled'); }
     else { a.href = '#utente'; a.setAttribute('aria-disabled', 'true'); }
   });
 }
