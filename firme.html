@@ -192,7 +192,8 @@ footer { margin-top: 30px; display: flex; flex-wrap: wrap; align-items: center; 
 
   <h1>Elenco <em>firme del personale</em></h1>
   <p class="lead">Carica l'elenco del personale (il file .xls scaricato dal gestionale), scegli il tipo di elenco e chi deve firmare: il foglio firme si stampa, si salva in PDF o si scarica in Word.
-    L'elenco resta <b>solo in questo browser</b>: non viene inviato a nessuno.</p>
+    <span id="lead-dove">L'elenco resta <b>solo in questo browser</b>: non viene inviato a nessuno.</span></p>
+  <p class="nota" id="caricamento" hidden>Lettura dell’elenco dal Drive della scuola…</p>
 
   <!-- 1. caricamento -->
   <label class="carica vetro" id="zona" for="file">
@@ -324,8 +325,22 @@ let gruppo = 'tutti';
 const esclusi = new Set(); // codici fiscali tolti a mano dall'elenco
 
 /* ---------------- memoria (solo questo browser) ---------------- */
-function salva() { try { localStorage.setItem(CHIAVE, JSON.stringify(db)); } catch (e) { avviso('Il browser non permette di ricordare l’elenco: andrà ricaricato la prossima volta.'); } }
+// Dentro l'app web Apps Script della segreteria l'elenco sta su Drive (account moduli@) ed è lo stesso per tutti;
+// aperta da sola, la pagina lo ricorda solo in questo browser.
+const DRIVE = typeof google === 'object' && !!google.script && !!google.script.run;
+const chiama = (fn, ...arg) => new Promise((ok, ko) => google.script.run.withSuccessHandler(ok).withFailureHandler(ko)[fn](...arg));
+function salva() {
+  if (DRIVE) return;
+  try { localStorage.setItem(CHIAVE, JSON.stringify(db)); } catch (e) { avviso('Il browser non permette di ricordare l’elenco: andrà ricaricato la prossima volta.'); }
+}
 function leggiMemoria() { try { return JSON.parse(localStorage.getItem(CHIAVE) || 'null'); } catch (e) { return null; } }
+// plessi cambiati: su Drive si mandano solo quelli
+async function salvaPlessi(persone) {
+  if (!DRIVE) return salva();
+  try { const r = await chiama('aggiornaPlessi', Object.fromEntries(persone.map((p) => [p.cf, p.plesso]))); db.modificato = r.modificato; db.modificatoDa = r.da; mostra(); }
+  catch (e) { avviso('Il plesso non è stato salvato su Drive: ' + e.message); }
+}
+const base64 = (buf) => { let s = ''; const b = new Uint8Array(buf); for (let i = 0; i < b.length; i += 0x8000) s += String.fromCharCode.apply(null, b.subarray(i, i + 0x8000)); return btoa(s); };
 
 /* ---------------- lettura del file ---------------- */
 const norm = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
@@ -373,7 +388,8 @@ async function apriFile(f) {
   avviso('');
   try {
     if (typeof XLSX === 'undefined') throw new Error('Manca la libreria per leggere i fogli di calcolo (lib/xlsx.full.min.js).');
-    const wb = XLSX.read(await f.arrayBuffer(), { type: 'array', cellDates: false });
+    const buf = await f.arrayBuffer();
+    const wb = XLSX.read(buf, { type: 'array', cellDates: false });
     const ws = wb.Sheets[wb.SheetNames[0]];
     const righe = XLSX.utils.sheet_to_json(ws, { header: 1, raw: false, defval: '' });
     const nuove = leggiFoglio(righe);
@@ -384,12 +400,19 @@ async function apriFile(f) {
       if (!p.plesso && p.ordine === 'Secondaria') p.plesso = 'Secondaria di I grado';
     }
     const titolo = righe.slice(0, 3).flat().find((x) => /elenco|personale|\d{2}\/\d{2}\/\d{4}/i.test(String(x)));
-    db = { fonte: f.name, titolo: String(titolo || ''), caricato: new Date().toISOString(), persone: nuove };
+    const nuovo = { fonte: f.name, titolo: String(titolo || ''), caricato: new Date().toISOString(), persone: nuove };
+    if (DRIVE) {
+      $('s-fonte').textContent = 'salvataggio su Drive…';
+      const r = await chiama('carica', JSON.stringify(nuovo), { nome: f.name, tipo: f.type || 'application/vnd.ms-excel', dati: base64(buf) });
+      Object.assign(nuovo, r);
+    }
+    db = nuovo;
     esclusi.clear();
     salva();
     mostra();
   } catch (e) {
-    avviso('Non riesco a leggere «' + f.name + '»: ' + e.message);
+    avviso((DRIVE && /Drive|autorizz|operator/i.test(e.message) ? '' : 'Non riesco a leggere «' + f.name + '»: ') + e.message);
+    if (db) mostra();
   }
 }
 
@@ -433,7 +456,9 @@ function mostra() {
   if (!db) return;
   $('s-fonte').textContent = db.titolo || db.fonte;
   $('s-tot').textContent = db.persone.length;
-  $('s-data').textContent = 'caricato il ' + new Date(db.caricato).toLocaleString('it-IT', { dateStyle: 'short', timeStyle: 'short' });
+  const quando = (d) => new Date(d).toLocaleString('it-IT', { dateStyle: 'short', timeStyle: 'short' });
+  $('s-data').textContent = (DRIVE ? 'su Drive, caricato il ' : 'caricato il ') + quando(db.caricato) + (db.da ? ' da ' + db.da : '') +
+    (db.modificato ? ' · plessi aggiornati il ' + quando(db.modificato) + (db.modificatoDa ? ' da ' + db.modificatoDa : '') : '');
   const senza = db.persone.filter((p) => !p.plesso).length;
   $('s-plessi').innerHTML = senza ? `<b style="color:#c47f00">${senza}</b> senza plesso` : 'plessi tutti assegnati';
   const fp = $('f-plesso').value;
@@ -461,7 +486,7 @@ $('righe').addEventListener('change', (e) => {
     riassunto();
   } else if (e.target.tagName === 'SELECT') {
     p.plesso = e.target.value; e.target.classList.toggle('vuoto', !p.plesso);
-    salva(); mostra();
+    salvaPlessi([p]); mostra();
   }
 });
 $('b-tutti').addEventListener('click', () => { filtrati().forEach((p) => esclusi.delete(p.cf)); disegna(); });
@@ -470,7 +495,7 @@ $('b-assegna').addEventListener('click', () => {
   const v = $('m-plesso').value; if (!v) return $('m-plesso').focus();
   const sel = selezionati();
   if (!sel.length || !confirm(`Assegnare il plesso «${v}» a ${sel.length} persone?`)) return;
-  sel.forEach((p) => { p.plesso = v; }); salva(); mostra();
+  sel.forEach((p) => { p.plesso = v; }); salvaPlessi(sel); mostra();
 });
 
 /* ---------------- foglio firme ---------------- */
@@ -815,9 +840,19 @@ $('o-tipo').innerHTML = TIPI.map((t) => `<option value="${t.id}">${esc(t.nome)}<
 $('o-tipo').addEventListener('change', scegliTipo);
 document.querySelector('.opz').addEventListener('input', riassunto);
 document.querySelector('.opz').addEventListener('change', riassunto);
-db = leggiMemoria();
-mostra();
-scegliTipo();
+if (DRIVE) {
+  $('b-cancella').hidden = true;
+  $('b-nuovo').textContent = 'Carica l’elenco aggiornato (sostituisce quello su Drive)';
+  $('lead-dove').innerHTML = 'L’elenco è salvato nel <b>Drive della scuola</b> e resta lo stesso per tutta la segreteria, fino a quando non si carica un file aggiornato.';
+  $('zona').hidden = true; avviso('');
+  $('caricamento').hidden = false;
+  chiama('leggi').then((r) => { db = r ? JSON.parse(r) : null; }).catch((e) => avviso(e.message))
+    .finally(() => { $('caricamento').hidden = true; mostra(); scegliTipo(); });
+} else {
+  db = leggiMemoria();
+  mostra();
+  scegliTipo();
+}
 </script>
 </body>
 </html>
