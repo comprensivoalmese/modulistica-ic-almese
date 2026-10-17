@@ -57,7 +57,13 @@ body { margin: 0; min-height: 100vh; min-height: 100dvh; background: linear-grad
 .pagina { position: relative; z-index: 1; max-width: 1040px; margin: 0 auto; padding: 28px 16px 40px;
   min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
 
-header { display: flex; align-items: center; gap: 12px; }
+header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.permessi { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; font-size: 14px; font-weight: 700;
+  color: var(--text); text-decoration: none; background: var(--glass); border: 1px solid var(--glass-line); box-shadow: var(--shadow);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: transform .2s; }
+.permessi svg { color: #d9822b; }
+.permessi:hover { transform: translateY(-2px); }
+.permessi:focus-visible { outline: 3px solid #d9822b; outline-offset: 3px; }
 .logo { width: 46px; height: 46px; border-radius: 12px; display: block; box-shadow: var(--shadow); }
 header b { display: block; font-size: 18px; letter-spacing: .14em; }
 header span { display: block; font-size: 13px; color: var(--muted); }
@@ -169,6 +175,9 @@ footer { margin-top: auto; padding-top: 40px; display: flex; flex-wrap: wrap; al
   <header>
     <img class="logo" src="icone/gate.svg" alt="" width="46" height="46">
     <div><b>GATE</b><span>Istituto Comprensivo di Almese · Modulistica</span></div>
+    <a class="permessi" href="https://script.google.com/a/macros/comprensivoalmese.it/s/AKfycbxhI6NL85P6x9HMAWEvsUzBnnOSKWmOGugHP42J_h-9zZrXvP2PSq2e5dB_3TfC-Kc71Q/exec?pagina=autorizzazioni" title="Solo per i super amministratori: chi può usare le parti di GATE">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M10.8 12.2 20 3M16 7l3 3M14 9l2 2"/></svg>
+      Autorizzazioni</a>
   </header>
 
   <section class="intro">
